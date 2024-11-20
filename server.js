@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import authRoutes from './routes/authRoutes';
+import authRoutes from './routes/authRoutes.js';
 import { EventEmitter } from 'events';
 
 dotenv.config();
@@ -26,4 +26,8 @@ app.use((err,req,res,next) => {
     res.status(500).json({
         message: err.message
     });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
