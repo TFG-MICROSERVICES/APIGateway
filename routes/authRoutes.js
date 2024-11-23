@@ -1,10 +1,14 @@
 import express from 'express';
 import { 
+    getAuthUser,
     login ,
-    logout
+    logout,
+    registerAuth
 } from '../controllers/authControllers.js';
 
 const router = express.Router();
+
+router.post('/register', registerAuth);
 
 router.post('/login',login);
 
