@@ -1,11 +1,13 @@
 import express from 'express';
+import { 
+    login ,
+    logout
+} from '../controllers/authControllers.js';
 
 const router = express.Router();
 
-router.get('/',(req,res) => {
-    res.json({
-        message: 'Hello from authRoutes'
-    });
-});
+router.post('/login',login);
+
+router.get('/logout',logout);
 
 export default router;
