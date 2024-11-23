@@ -39,26 +39,24 @@ export async function login(req, res, next){
     const { email, password } = req.body;
     try {
         const response = await fetch(`${API_AUTH_LOCAL}/auth/login`, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'x-api-key': API_GATEWAY_KEY
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include',
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY
+            },
+            body: JSON.stringify({ email, password }),
+            credentials: 'include',
         });
     
         const user = await response.json();
     
         if (response.status !== 200) generateError(user.message, response.status);
 
-        console.log('user', user);
-
         const cookies = setCookie.parse(response.headers.raw()['set-cookie'], { map: true });
         const refreshToken = cookies.refreshToken.value;
 
         res.cookie("refreshToken", refreshToken, {
-            maxAge: 1000 * 60 * 60 * 24 * 30, // 30 días
+            maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
             secure: true,
             sameSite: "none",
