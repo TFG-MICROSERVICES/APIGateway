@@ -47,6 +47,7 @@ export async function login(req, res, next){
 
 export async function deleteAuth(req, res, next){
     try{
+        console.log(req.cookies.accessToken);
         const response = await fetch(`${API_AUTH}/auth/delete`, {
             method: 'DELETE',
             headers: { 

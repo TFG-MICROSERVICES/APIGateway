@@ -1,16 +1,16 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
-import { deleteAuth } from '../utils/deleteAuth.js';
+import { deleteAuth } from './authControllers.js';
 
 dotenv.config();
 
-const { API_GATEWAY_KEY, API_USER } = process.env;
+const { API_GATEWAY_KEY, API_USER, API_AUTH_LOCAL } = process.env;
 
 
 export async function registerUser(req, res, next){
-    const { user } = req.user;
     const data = req.body;
+    const token = req.user.token;
     try{
         const response = await fetch(`${API_USER}/user/register`, {
             method: 'POST',
@@ -24,7 +24,15 @@ export async function registerUser(req, res, next){
         const newUser = await response.json();
 
         if (response.status !== 201){
-
+            console.log("Rollbacking user creation");
+            const response = await fetch(`${API_AUTH_LOCAL}/auth/${req.user.user.email}`, {
+                method: 'DELETE',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-api-key': API_GATEWAY_KEY,
+                    'Authorization': `Bearer ${token}`
+                },
+            });
             generateError(newUser.message, response.status);
         }
 
