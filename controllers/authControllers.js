@@ -7,34 +7,6 @@ dotenv.config();
 
 const { API_GATEWAY_KEY, API_AUTH, API_AUTH_LOCAL } = process.env;
 
-export async function registerAuth(req, res, next){
-    const { email, password } = req.body;
-    try{
-        const response = await fetch(`${API_AUTH_LOCAL}/auth/register`, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY
-            },
-            body: JSON.stringify({ email, password }),
-            credentials: 'include',
-        });
-
-        const user = await response.json();
-
-        if (response.status !== 201) generateError(user.message, response.status);
-
-        res.status(201).json({
-            message: 'User created successfully',
-            user: user,
-        });
-    }catch(error){
-        res.status(error.status || 500).json({
-            message: error.message,
-        });
-    }
-}
-
 export async function login(req, res, next){
     const { email, password } = req.body;
     try {
@@ -72,6 +44,30 @@ export async function login(req, res, next){
         });
     }
 };
+
+export async function deleteAuth(req, res, next){
+    try{
+        const response = await fetch(`${API_AUTH}/auth/delete`, {
+            method: 'DELETE',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+                'Authorization': `Bearer ${req.cookies.accessToken}`
+            },
+        });
+
+        const user = await response.json();
+
+        if (response.status !== 200) generateError(user.message, response.status);
+
+        res.status(200).json({
+            message: 'User deleted successfully',
+            user
+        });
+    }catch(error){
+        next(error);
+    }
+}
 
 export async function logout(req, res, next) {
     try {

@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import { EventEmitter } from 'events';
 
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(morgan('combined'));
 
 app.use('/api/auth',authRoutes);
+app.use('/api/user',userRoutes);
 
 
 app.use((req,res,next) => {
