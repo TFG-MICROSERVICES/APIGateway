@@ -5,7 +5,7 @@ import { deleteAuth } from './authControllers.js';
 
 dotenv.config();
 
-const { API_GATEWAY_KEY, API_USER, API_AUTH_LOCAL } = process.env;
+const { API_GATEWAY_KEY, API_USER, AUTH_API } = process.env;
 
 
 export async function registerUser(req, res, next){
@@ -25,7 +25,7 @@ export async function registerUser(req, res, next){
 
         if (response.status !== 201){
             console.log("Rollbacking user creation");
-            const response = await fetch(`${API_AUTH_LOCAL}/auth/${req.user.user.email}`, {
+            const response = await fetch(`${AUTH_API}/auth/${req.user.user.email}`, {
                 method: 'DELETE',
                 headers: { 
                     'Content-Type': 'application/json',

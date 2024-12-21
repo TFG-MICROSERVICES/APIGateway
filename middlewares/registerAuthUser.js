@@ -2,12 +2,12 @@ import fetch from 'node-fetch';
 import { generateError } from '../utils/generateError.js';
 import dotenv from 'dotenv';
 
-const { API_GATEWAY_KEY, API_AUTH_LOCAL } = process.env;
+const { API_GATEWAY_KEY, AUTH_API } = process.env;
 
 export async function registerAuthUser(req, res, next){
     const { email, password } = req.body;
     try{
-        const response = await fetch(`${API_AUTH_LOCAL}/auth/register`, {
+        const response = await fetch(`${AUTH_API}/auth/register`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',

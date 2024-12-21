@@ -4,11 +4,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const { API_AUTH_LOCAL, API_GATEWAY_KEY } = process.env;
+const { AUTH_API, API_GATEWAY_KEY } = process.env;
 
 export async function getAuthUser(req, res, next) {
     try {
-        const getUserAuthRequest = await fetch(`${API_AUTH_LOCAL}/auth/check`, {
+        const getUserAuthRequest = await fetch(`${AUTH_API}/auth/check`, {
             headers: {
                 authorization: `${req.headers.authorization}`,
                 "X-API-Key": API_GATEWAY_KEY,

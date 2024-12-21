@@ -5,12 +5,12 @@ import { generateError } from '../utils/generateError.js';
 
 dotenv.config();
 
-const { API_GATEWAY_KEY, API_AUTH, API_AUTH_LOCAL } = process.env;
+const { API_GATEWAY_KEY, AUTH_API } = process.env;
 
 export async function login(req, res, next){
     const { email, password } = req.body;
     try {
-        const response = await fetch(`${API_AUTH_LOCAL}/auth/login`, {
+        const response = await fetch(`${AUTH_API}/auth/login`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
