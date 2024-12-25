@@ -5,24 +5,26 @@ import { deleteAuth } from './authControllers.js';
 
 dotenv.config();
 
-const { API_GATEWAY_KEY, API_USER, AUTH_API } = process.env;
+const { API_GATEWAY_KEY, USER_API, AUTH_API, INTERNAL_API_KEY } = process.env;
 
 
 export async function registerUser(req, res, next){
     const data = req.body;
     const token = req.user.token;
     try{
-        const response = await fetch(`${API_USER}/user/register`, {
+        const response = await fetch(`${USER_API}/user/register`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY
+                'x-api-key': API_GATEWAY_KEY,
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(data),
         });
 
         const newUser = await response.json();
 
+        //If data response is not 201, rollback the user creation to evict inconsistency data in both services
         if (response.status !== 201){
             console.log("Rollbacking user creation");
             const response = await fetch(`${AUTH_API}/auth/${req.user.user.email}`, {
@@ -30,12 +32,19 @@ export async function registerUser(req, res, next){
                 headers: { 
                     'Content-Type': 'application/json',
                     'x-api-key': API_GATEWAY_KEY,
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'x-internal-key': INTERNAL_API_KEY
                 },
             });
-            generateError(newUser.message, response.status);
+            const deletedUser = await response.json();
+            if (response.status !== 200) generateError(deletedUser.message, deletedUser.status);
+            //Inform the user that the user was not created by duplicated data or invalid data
+            res.status(400).json({
+                message: "User not created by duplicated data or invalid data",
+            })
         }
 
+        //If data response is 201, return the user created
         res.status(201).json({
             message: 'User created successfully',
             newUser
@@ -47,7 +56,7 @@ export async function registerUser(req, res, next){
 
 export async function getUsers(req, res, next){
     try{
-        const response = await fetch(`${API_USER}/user`, {
+        const response = await fetch(`${USER_API}/user`, {
             headers: {
                 "Content-Type": "application/json",
                 'x-api-key': API_GATEWAY_KEY
