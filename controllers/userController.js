@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
-import { deleteAuth } from './authControllers.js';
 
 dotenv.config();
 
@@ -69,6 +68,84 @@ export async function getUsers(req, res, next){
 
         res.status(200).json({
             users
+        });
+    }catch(error){
+        next(error);
+    }
+}
+
+export async function updateUser(req, res, next){
+    const { email } = req.params;
+    const data = req.body;
+    const token = req.user.token;
+    try{
+        const response = await fetch(`${USER_API}/user/${email}`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(data),
+        });
+
+        const user = await response.json();
+
+        if (response.status !== 200) generateError(user.message, response.status);
+
+        res.status(200).json({
+            message: 'User updated successfully',
+            user,
+        });
+    }catch(error){
+        next(error);
+    }
+}
+
+export async function updateEmailUser(req, res, next){
+    const { email } = req.params;
+    const { newEmail } = req.body;
+    try{
+        const response = await fetch(`${USER_API}/user/email/${email}`, {
+            method: 'PATCH',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+            body: JSON.stringify({newEmail}),
+        });
+
+        const user = await response.json();
+
+        if (response.status !== 200) generateError(user.message, response.status);
+
+
+        next();
+    }catch(error){
+        next(error);
+    }
+}
+
+export async function deleteUser(req, res, next){
+    const { email } = req.params;
+    const token = req.user.token;
+    try{
+        const response = await fetch(`${USER_API}/user/${email}`, {
+            method: 'DELETE',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+                'Authorization': `Bearer ${token}`
+            },
+        });
+
+        const user = await response.json();
+
+        if (response.status !== 200) generateError(user.message, response.status);
+
+        res.status(200).json({
+            message: 'User deleted successfully',
+            user
         });
     }catch(error){
         next(error);

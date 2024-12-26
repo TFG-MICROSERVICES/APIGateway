@@ -8,10 +8,12 @@ const { AUTH_API, API_GATEWAY_KEY } = process.env;
 
 export async function getAuthUser(req, res, next) {
     try {
+        const token = req.headers.authorization;
         const getUserAuthRequest = await fetch(`${AUTH_API}/auth/check`, {
             headers: {
-                authorization: `${req.headers.authorization}`,
+                "Content-Type": "application/json",
                 "X-API-Key": API_GATEWAY_KEY,
+                "Authorization": `Bearer ${token}`,
             },
         });
 
@@ -20,6 +22,7 @@ export async function getAuthUser(req, res, next) {
         if (getUserAuthRequest.status !== 200) generateError(getUserAuth.message, getUserAuth.status);
 
         req.user = getUserAuth.user;
+        req.user.token = token;
 
         console.log(req.user);
 

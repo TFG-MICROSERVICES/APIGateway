@@ -45,9 +45,66 @@ export async function login(req, res, next){
     }
 };
 
+export async function updatePasswordUser(req, res, next){
+    const { email } = req.params;
+    const { password } = req.body;
+    const token = req.headers.authorization;
+    try{
+        const response = await fetch(`${AUTH_API}/auth/password/${email}`, {
+            method: 'PATCH',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({password}),
+        });
+
+        const user = await response.json();
+
+        console.log(user);
+
+        if (response.status !== 200) generateError(user.message, response.status);
+
+        res.status(200).json({
+            message: 'Password updated successfully',
+            user,
+        });
+    }catch(error){
+        next(error);
+    }
+}
+
+export async function updateAdminUser(req, res, next){
+    const { email } = req.params;
+    const { isAdmin } = req.body;
+    const token = req.headers.authorization;
+    try{
+        const response = await fetch(`${AUTH_API}/auth/${email}`, {
+            method: 'PATCH',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ isAdmin }),
+        });
+
+        const user = await response.json();
+
+        if (response.status !== 200) generateError(user.message, response.status);
+
+        res.status(200).json({
+            message: 'User updated successfully',
+            user,
+        });
+    }catch(error){
+        next(error);
+    }
+}
+
 export async function deleteAuth(req, res, next){
     try{
-        console.log(req.cookies.accessToken);
         const response = await fetch(`${API_AUTH}/auth/delete`, {
             method: 'DELETE',
             headers: { 
