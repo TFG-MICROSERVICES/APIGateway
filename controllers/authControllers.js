@@ -145,28 +145,28 @@ export async function logout(req, res, next) {
     }
 }
 
-export async function getAuthUser(req, res, next){
-    try{
-        const { email } = req.params;
+// export async function getAuthUser(req, res, next){
+//     try{
+//         const { email } = req.params;
 
-        if(!email) generateError('Email is required', 400);
+//         if(!email) generateError('Email is required', 400);
 
-        const response = await fetch(`${API_AUTH}/auth/user/${email}`, {
-            headers: { 
-                'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY,
-                'Authorization': `Bearer ${req.cookies.accessToken}`
-            },
-        });
+//         const response = await fetch(`${API_AUTH}/auth/user/${email}`, {
+//             headers: { 
+//                 'Content-Type': 'application/json',
+//                 'x-api-key': API_GATEWAY_KEY,
+//                 'Authorization': `Bearer ${req.cookies.accessToken}`
+//             },
+//         });
 
-        const user = await response.json();
+//         const user = await response.json();
 
-        if (response.status !== 200) generateError(user.message, response.status);
+//         if (response.status !== 200) generateError(user.message, response.status);
 
-        res.status(200).json({
-            user: user,
-        });
-    }catch(error){
-        next(error);
-    }
-}
+//         res.status(200).json({
+//             user: user,
+//         });
+//     }catch(error){
+//         next(error);
+//     }
+// }

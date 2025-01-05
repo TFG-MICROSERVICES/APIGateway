@@ -16,7 +16,6 @@ export async function registerUser(req, res, next){
             headers: { 
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
-                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(data),
         });
@@ -25,7 +24,6 @@ export async function registerUser(req, res, next){
 
         //If data response is not 201, rollback the user creation to evict inconsistency data in both services
         if (response.status !== 201){
-            console.log("Rollbacking user creation");
             const response = await fetch(`${AUTH_API}/auth/${req.user.user.email}`, {
                 method: 'DELETE',
                 headers: { 

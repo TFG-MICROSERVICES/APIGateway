@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import sportRoutes from './routes/sportRoutes.js';
 import { EventEmitter } from 'events';
 
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(morgan('combined'));
 
 app.use('/api/auth',authRoutes);
 app.use('/api/user',userRoutes);
+app.use('/api/sport',sportRoutes);
 
 
 app.use((req,res,next) => {
@@ -29,6 +31,7 @@ app.use((err, req, res, next) => {
         message: err.message,
     });
 });
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
