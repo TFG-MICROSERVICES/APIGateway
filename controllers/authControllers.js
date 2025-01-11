@@ -45,6 +45,25 @@ export async function login(req, res, next){
     }
 };
 
+export const loginGoogle = async (req, res, next) => {
+    try{
+        const response = await fetch(`${AUTH_API}/auth/google`, {
+            method: 'GET',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY
+            },
+        });
+
+        const data = await response.json();
+
+        res.redirect(data.redirectUri);
+    }catch(error){
+        next(error);
+    }
+};
+    
+
 export async function updatePasswordUser(req, res, next){
     const { email } = req.params;
     const { password } = req.body;

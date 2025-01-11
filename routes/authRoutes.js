@@ -2,6 +2,7 @@ import express from 'express';
 import { 
     login ,
     logout,
+    loginGoogle,
 } from '../controllers/authControllers.js';
 import { 
     updateAdminUser,
@@ -13,6 +14,8 @@ import { getAuthUser } from '../middlewares/getAuthUser.js';
 const router = express.Router();
 
 router.post('/login',login);
+
+router.get('/google', loginGoogle);
 
 router.get('/logout', logout);
 
