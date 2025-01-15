@@ -16,6 +16,8 @@ const router = express.Router();
 
 router.post('/register', registerAuthUser, registerUser);
 
+router.post('/register/google', registerUser);
+
 router.delete('/:email', getAuthUser, verifyEmailMatch, deleteAuthUser, deleteUser);
 
 router.put('/:email', getAuthUser, verifyEmailMatch, updateUser);
