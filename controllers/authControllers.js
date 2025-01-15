@@ -62,6 +62,29 @@ export const loginGoogle = async (req, res, next) => {
         next(error);
     }
 };
+
+export const loginGoogleCallback = async (req, res, next) => {
+    const { code } = req.query;
+
+    try{
+        if(!code) generateError('Error: No authorization code received', 400);
+        const response = await fetch(`${AUTH_API}/auth/google/callback?code=${code}`, {
+            method: 'GET',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY
+            },
+        });
+
+        const data = await response.json();
+
+        res.status(200).json({
+            data,
+        });
+    }catch(error){
+        next(error);
+    }
+};
     
 
 export async function updatePasswordUser(req, res, next){

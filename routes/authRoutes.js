@@ -3,6 +3,7 @@ import {
     login ,
     logout,
     loginGoogle,
+    loginGoogleCallback,
 } from '../controllers/authControllers.js';
 import { 
     updateAdminUser,
@@ -16,6 +17,8 @@ const router = express.Router();
 router.post('/login',login);
 
 router.get('/google', loginGoogle);
+
+router.get('/google/callback', loginGoogleCallback);
 
 router.get('/logout', logout);
 
