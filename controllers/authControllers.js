@@ -24,7 +24,22 @@ export async function login(req, res, next){
     
         if (response.status !== 200) generateError(user.message, response.status);
 
+        // Obtener las cookies de la respuesta
+        const cookies = setCookie.parse(response.headers.get('set-cookie'));
+        const refreshToken = cookies.find(cookie => cookie.name === 'refreshToken');
+
+        // Si existe el refreshToken, establecerlo en las cookies del cliente
+        if (refreshToken) {
+            res.cookie('refreshToken', refreshToken.value, {
+                maxAge: refreshToken.maxAge * 1000,
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax'
+            });
+        }
+
         res.status(200).json({
+            status: 200,
             message: 'Login successful',
             user,
         });
@@ -67,6 +82,7 @@ export const loginGoogleCallback = async (req, res, next) => {
         const data = await response.json();
 
         res.status(200).json({
+            status: 200,
             data,
         });
     }catch(error){
@@ -97,6 +113,7 @@ export async function updatePasswordUser(req, res, next){
         if (response.status !== 200) generateError(user.message, response.status);
 
         res.status(200).json({
+            status: 200,
             message: 'Password updated successfully',
             user,
         });
@@ -125,6 +142,7 @@ export async function updateAdminUser(req, res, next){
         if (response.status !== 200) generateError(user.message, response.status);
 
         res.status(200).json({
+            status: 200,
             message: 'User updated successfully',
             user,
         });
@@ -135,7 +153,7 @@ export async function updateAdminUser(req, res, next){
 
 export async function deleteAuth(req, res, next){
     try{
-        const response = await fetch(`${API_AUTH}/auth/delete`, {
+        const response = await fetch(`${AUTH_API}/auth/delete`, {
             method: 'DELETE',
             headers: { 
                 'Content-Type': 'application/json',
@@ -149,6 +167,7 @@ export async function deleteAuth(req, res, next){
         if (response.status !== 200) generateError(user.message, response.status);
 
         res.status(200).json({
+            status: 200,
             message: 'User deleted successfully',
             user
         });
@@ -168,6 +187,7 @@ export async function logout(req, res, next) {
         });
 
         res.status(200).json({
+            status: 200,
             message: "Logout successful",
         });
     } catch (error) {
@@ -175,28 +195,50 @@ export async function logout(req, res, next) {
     }
 }
 
-// export async function getAuthUser(req, res, next){
-//     try{
-//         const { email } = req.params;
+export const checkAuth = async (req, res, next) => {
+    try{
+        const token = req.headers.authorization;
 
-//         if(!email) generateError('Email is required', 400);
+        let resfreshToken = "";
+        const oldCookie = req.cookies?.refreshToken;
 
-//         const response = await fetch(`${API_AUTH}/auth/user/${email}`, {
-//             headers: { 
-//                 'Content-Type': 'application/json',
-//                 'x-api-key': API_GATEWAY_KEY,
-//                 'Authorization': `Bearer ${req.cookies.accessToken}`
-//             },
-//         });
+        if(oldCookie && oldCookie !== "undefined"){
+            resfreshToken = oldCookie;
+        }
 
-//         const user = await response.json();
+        const response = await fetch(`${AUTH_API}/auth/check`, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "x-api-key": API_GATEWAY_KEY,
+                Authorization: token,
+            },
+            body: JSON.stringify({ refreshToken: resfreshToken }),
+        });
 
-//         if (response.status !== 200) generateError(user.message, response.status);
+        if(response.status !== 200) generateError('Unauthorized', 401);
 
-//         res.status(200).json({
-//             user: user,
-//         });
-//     }catch(error){
-//         next(error);
-//     }
-// }
+        const user = await response.json();
+
+        const cookies = setCookie.parse(response.headers.get('set-cookie'));
+        const refreshToken = cookies.find(cookie => cookie.name === 'refreshToken');
+
+        if (refreshToken) {
+            res.cookie('refreshToken', refreshToken.value, {
+                maxAge: refreshToken.maxAge * 1000,
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax'
+            });
+        }
+        
+        res.status(200).json({
+            status: 200,
+            message: 'User authenticated',
+            user,
+        });
+    }catch(error){
+        console.log(error);
+        next(error);
+    }
+}

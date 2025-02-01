@@ -24,6 +24,7 @@ export const registerSport = async (req,res,next) =>{
         if(response.status !== 201) generateError(newSport.message,newSport.status);
 
         res.status(201).json({
+            status: 201,
             message: 'Sport created successfully',
             newSport
         });
@@ -47,6 +48,7 @@ export const getSports = async (req,res,next) =>{
         if(response.status !== 200) generateError(sports.message,sports.status);
 
         res.status(200).json({
+            status: 200,
             sports
         });
     }catch(error){  
@@ -71,6 +73,7 @@ export const getSportsByID = async (req,res,next) =>{
         if(response.status !== 200) generateError(sport.message, sport.status);
 
         res.status(200).json({
+            status: 200,
             sport
         });
     }catch(error){
@@ -96,6 +99,7 @@ export const updateSport = async (req,res,next) =>{
         if(response.status !== 200) generateError(updateSport.message, updateSport.status);
 
         res.status(200).json({
+            status: 200,
             updateSport
         });
     }catch(error){
@@ -119,6 +123,7 @@ export const deleteSport = async (req,res,next) =>{
         if(response.status !== 200) generateError(deleteSport.message,deleteSport.status);
 
         res.status(200).json({
+            status: 200,
             deleteSport
         });
     }catch(error){

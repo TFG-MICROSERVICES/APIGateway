@@ -25,6 +25,7 @@ export const registerTeam = async (req,res,next) => {
         if(response.status !== 201) generateError(newTeam.message,newTeam.status);
 
         res.status(201).json({
+            status: 201,
             message: 'Sport created successfully',
             newTeam
         });
@@ -49,6 +50,7 @@ export const getTeams = async (req,res,next) => {
         if(response.status !== 201) generateError(teams.message,teams.status);
 
         res.status(201).json({
+            status: 200,
             teams
         });
     }catch(error){
@@ -73,7 +75,8 @@ export const getTeamById = async (req,res,next) =>{
         if(response.status !== 200) generateError(team.message, team.status);
 
         res.status(200).json({
-         team
+            status: 200,
+            team
         });
     }catch(error){
         next(error);
@@ -98,6 +101,7 @@ export const updateTeam = async (req,res,next) =>{
         if(response.status !== 200) generateError(updateTeam.message, updateTeam.status);
 
         res.status(200).json({
+            status: 200,
             updateTeam
         });
     }catch(error){
@@ -121,6 +125,7 @@ export const deleteTeam = async (req,res,next) =>{
         if(response.status !== 200) generateError(deleteTeam.message,deleteTeam.status);
 
         res.status(200).json({
+            status: 200,
             deleteTeam
         });
     }catch(error){

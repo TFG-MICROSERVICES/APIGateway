@@ -7,6 +7,7 @@ import userRoutes from './routes/userRoutes.js';
 import sportRoutes from './routes/sportRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
 import { EventEmitter } from 'events';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(
 
 app.use(express.json());
 app.use(morgan('combined'));
+app.use(cookieParser());
 
 app.use('/api/auth',authRoutes);
 app.use('/api/user',userRoutes);
@@ -39,6 +41,7 @@ app.use((req,res,next) => {
 
 app.use((err, req, res, next) => {
     res.status(err.status || 500).json({
+        status: err.status || 500,
         message: err.message,
     });
 });

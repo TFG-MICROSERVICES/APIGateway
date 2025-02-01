@@ -43,6 +43,7 @@ export async function registerUser(req, res, next){
 
         //If data response is 201, return the user created
         res.status(201).json({
+            status: 201,
             message: 'User created successfully',
             newUser
         });
@@ -65,6 +66,7 @@ export async function getUsers(req, res, next){
         if (response.status !== 200) generateError(users.message, response.status);
 
         res.status(200).json({
+            status: 200,
             users
         });
     }catch(error){
@@ -92,6 +94,7 @@ export async function updateUser(req, res, next){
         if (response.status !== 200) generateError(user.message, response.status);
 
         res.status(200).json({
+            status: 200,
             message: 'User updated successfully',
             user,
         });
@@ -142,6 +145,7 @@ export async function deleteUser(req, res, next){
         if (response.status !== 200) generateError(user.message, response.status);
 
         res.status(200).json({
+            status: 200,
             message: 'User deleted successfully',
             user
         });

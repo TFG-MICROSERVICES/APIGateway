@@ -24,8 +24,6 @@ export async function registerAuthUser(req, res, next){
         req.user = user;
         next();
     }catch(error){
-        res.status(error.status || 500).json({
-            message: error.message,
-        });
+        next(error);
     }
 }

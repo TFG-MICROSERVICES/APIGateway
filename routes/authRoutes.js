@@ -4,6 +4,7 @@ import {
     logout,
     loginGoogle,
     loginGoogleCallback,
+    checkAuth,
 } from '../controllers/authControllers.js';
 import { 
     updateAdminUser,
@@ -23,6 +24,8 @@ router.get('/google/callback', loginGoogleCallback);
 router.get('/logout', logout);
 
 router.patch('/password/:email', getAuthUser, verifyEmailMatch, updatePasswordUser);
+
+router.get('/check', checkAuth);
 
 router.patch('/:email', updateAdminUser);
 
