@@ -1,9 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import sportRoutes from './routes/sportRoutes.js';
+import teamRoutes from './routes/teamRoutes.js';
 import { EventEmitter } from 'events';
 
 dotenv.config();
@@ -12,12 +14,21 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 EventEmitter.defaultMaxListeners = 30;
+app.use(
+    cors({
+        origin: ['http://localhost:5173',],
+        exposedHeaders: 'Authorization',
+        credentials: true,
+    })
+);
+
 app.use(express.json());
 app.use(morgan('combined'));
 
 app.use('/api/auth',authRoutes);
 app.use('/api/user',userRoutes);
 app.use('/api/sport',sportRoutes);
+app.use('/api/teams',teamRoutes);
 
 
 app.use((req,res,next) => {

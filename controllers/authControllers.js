@@ -24,24 +24,12 @@ export async function login(req, res, next){
     
         if (response.status !== 200) generateError(user.message, response.status);
 
-        const cookies = setCookie.parse(response.headers.raw()['set-cookie'], { map: true });
-        const refreshToken = cookies.refreshToken.value;
-
-        res.cookie("refreshToken", refreshToken, {
-            maxAge: 1000 * 60 * 60 * 24 * 30,
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-        });
-    
         res.status(200).json({
             message: 'Login successful',
             user,
         });
     } catch (error) {
-        res.status(error.status || 500).json({
-            message: error.message,
-        });
+        next(error);
     }
 };
 
