@@ -21,6 +21,8 @@ export async function login(req, res, next){
         });
     
         const user = await response.json();
+
+        console.log(user);
     
         if (response.status !== 200) generateError(user.message, response.status);
 
