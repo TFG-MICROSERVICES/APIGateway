@@ -4,6 +4,8 @@ import {
     deleteUser,
     updateUser,
     updateEmailUser,
+    getUsers,
+    getUser,
 } from '../controllers/userController.js';
 import { registerAuthUser } from '../middlewares/registerAuthUser.js';
 import { deleteAuthUser } from '../middlewares/deleteAuthUser.js';
@@ -13,6 +15,10 @@ import { logout } from '../controllers/authControllers.js';
 import { verifyEmailMatch } from '../middlewares/verifyEmailMatch.js';
 
 const router = express.Router();
+
+router.get('/', getAuthUser, getUsers);
+
+router.get('/:email', getAuthUser, verifyEmailMatch, getUser);
 
 router.post('/register', registerAuthUser, registerUser);
 

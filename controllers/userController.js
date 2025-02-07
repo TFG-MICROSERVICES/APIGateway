@@ -54,7 +54,14 @@ export async function registerUser(req, res, next){
 
 export async function getUsers(req, res, next){
     try{
-        const response = await fetch(`${USER_API}/user`, {
+        const { search } = req.query;
+        console.log(req.query);
+        console.log(search);
+        let params = '';
+        if(search){
+            params = new URLSearchParams({search}).toString();
+        }
+        const response = await fetch(`${USER_API}/user${params ? '?' + params : ''}`, {
             headers: {
                 "Content-Type": "application/json",
                 'x-api-key': API_GATEWAY_KEY
@@ -68,6 +75,29 @@ export async function getUsers(req, res, next){
         res.status(200).json({
             status: 200,
             users
+        });
+    }catch(error){
+        next(error);
+    }
+}
+
+export const getUser = async (req, res, next) => {
+    const { email } = req.params;
+    try{
+        const response = await fetch(`${USER_API}/user/${email}`, {
+            headers: {
+                "Content-Type": "application/json",
+                'x-api-key': API_GATEWAY_KEY
+            }
+        });
+
+        const user = await response.json();
+
+        if (response.status !== 200) generateError(user.message, response.status);
+
+        res.status(200).json({
+            status: 200,
+            user
         });
     }catch(error){
         next(error);

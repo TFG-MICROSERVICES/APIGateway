@@ -34,16 +34,23 @@ app.use('/api/teams',teamRoutes);
 
 
 app.use((req,res,next) => {
+    console.log('Route not found');
     res.status(404).json({
         message: 'Route not found'
     });
 });
 
 app.use((err, req, res, next) => {
+    console.error(err);
     res.status(err.status || 500).json({
         status: err.status || 500,
         message: err.message,
     });
+});
+
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`);
+    next();
 });
 
 app.listen(PORT, () => {

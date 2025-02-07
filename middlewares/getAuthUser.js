@@ -10,10 +10,11 @@ export async function getAuthUser(req, res, next) {
     try {
         const token = req.headers.authorization;
         const getUserAuthRequest = await fetch(`${AUTH_API}/auth/check`, {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "X-API-Key": API_GATEWAY_KEY,
-                "Authorization": `Bearer ${token}`,
+                Authorization: token,
             },
         });
 
