@@ -50,24 +50,6 @@ export async function login(req, res, next){
     }
 };
 
-export const loginGoogle = async (req, res, next) => {
-    try{
-        const response = await fetch(`${AUTH_API}/auth/google`, {
-            method: 'GET',
-            headers: { 
-                'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY
-            },
-        });
-
-        const data = await response.json();
-
-        res.redirect(data.redirectUri);
-    }catch(error){
-        next(error);
-    }
-};
-
 export const loginGoogleCallback = async (req, res, next) => {
     const { code } = req.query;
 
@@ -82,6 +64,23 @@ export const loginGoogleCallback = async (req, res, next) => {
         });
 
         const data = await response.json();
+
+        if(response.status !== 200) generateError(response.message, response.status);
+
+        // Obtener las cookies de la respuesta
+        const cookies = setCookie.parse(response.headers.get('set-cookie'));
+        const refreshToken = cookies.find(cookie => cookie.name === 'refreshToken');
+
+        // Si existe el refreshToken, establecerlo en las cookies del cliente
+        if (refreshToken) {
+            res.cookie('refreshToken', refreshToken.value, {
+                maxAge: refreshToken.maxAge * 1000,
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax'
+            });
+        }
+        
 
         res.status(200).json({
             status: 200,
@@ -222,6 +221,8 @@ export const checkAuth = async (req, res, next) => {
 
         const user = await response.json();
 
+        console.log("headers",response.headers);
+
         const cookies = setCookie.parse(response.headers.get('set-cookie'));
         const refreshToken = cookies.find(cookie => cookie.name === 'refreshToken');
 
@@ -233,7 +234,10 @@ export const checkAuth = async (req, res, next) => {
                 sameSite: 'lax'
             });
         }
-        
+        const authHeader = response.headers.get('authorization');
+        if (authHeader) {
+            res.setHeader('authorization', authHeader);
+        }
         res.status(200).json({
             status: 200,
             message: 'User authenticated',

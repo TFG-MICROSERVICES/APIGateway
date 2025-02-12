@@ -6,6 +6,7 @@ const { API_GATEWAY_KEY, AUTH_API } = process.env;
 
 export async function registerAuthUser(req, res, next){
     const { email, password } = req.body;
+    console.log(API_GATEWAY_KEY);
     try{
         const response = await fetch(`${AUTH_API}/auth/register`, {
             method: 'POST',

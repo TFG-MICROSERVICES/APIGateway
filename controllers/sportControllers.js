@@ -35,7 +35,12 @@ export const registerSport = async (req,res,next) =>{
 
 export const getSports = async (req,res,next) =>{
     try{
-        const response = await fetch(`${SPORT_API}/sport`,{
+        const { search } = req.query;
+        let params = '';
+        if(search){
+            params = new URLSearchParams({search}).toString();
+        }
+        const response = await fetch(`${SPORT_API}/sport${params ? '?' + params : ''}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

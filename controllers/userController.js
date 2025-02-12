@@ -9,7 +9,7 @@ const { API_GATEWAY_KEY, USER_API, AUTH_API, INTERNAL_API_KEY } = process.env;
 
 export async function registerUser(req, res, next){
     const data = req.body;
-    const token = req.user.token;
+    const token = req.headers.authorization;
     try{
         const response = await fetch(`${USER_API}/user/register`, {
             method: 'POST',
@@ -29,7 +29,7 @@ export async function registerUser(req, res, next){
                 headers: { 
                     'Content-Type': 'application/json',
                     'x-api-key': API_GATEWAY_KEY,
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': token,
                     'x-internal-key': INTERNAL_API_KEY
                 },
             });
@@ -55,8 +55,6 @@ export async function registerUser(req, res, next){
 export async function getUsers(req, res, next){
     try{
         const { search } = req.query;
-        console.log(req.query);
-        console.log(search);
         let params = '';
         if(search){
             params = new URLSearchParams({search}).toString();
