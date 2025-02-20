@@ -4,19 +4,19 @@ import dotenv from 'dotenv';
 
 const { API_GATEWAY_KEY, AUTH_API } = process.env;
 
-export async function updateEmailAuth(req, res, next){
+export async function updateEmailAuth(req, res, next) {
     const { email } = req.params;
     const token = req.headers.authorization;
     const { newEmail } = req.body;
-    try{
+    try {
         const response = await fetch(`${AUTH_API}/auth/email/${email}`, {
             method: 'PATCH',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
-                'Authorization': `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({email: newEmail}),
+            body: JSON.stringify({ email: newEmail }),
         });
 
         const user = await response.json();
@@ -24,7 +24,7 @@ export async function updateEmailAuth(req, res, next){
         if (response.status !== 200) generateError(user.message, response.status);
 
         next();
-    }catch(error){
+    } catch (error) {
         res.status(error.status || 500).json({
             message: error.message,
         });

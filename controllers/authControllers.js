@@ -7,28 +7,28 @@ dotenv.config();
 
 const { API_GATEWAY_KEY, AUTH_API } = process.env;
 
-export async function login(req, res, next){
+export async function login(req, res, next) {
     const { email, password } = req.body;
     try {
         const response = await fetch(`${AUTH_API}/auth/login`, {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY
+                'x-api-key': API_GATEWAY_KEY,
             },
             body: JSON.stringify({ email, password }),
             credentials: 'include',
         });
-    
+
         const user = await response.json();
 
         console.log(user);
-    
+
         if (response.status !== 200) generateError(user.message, response.status);
 
         // Obtener las cookies de la respuesta
         const cookies = setCookie.parse(response.headers.get('set-cookie'));
-        const refreshToken = cookies.find(cookie => cookie.name === 'refreshToken');
+        const refreshToken = cookies.find((cookie) => cookie.name === 'refreshToken');
 
         // Si existe el refreshToken, establecerlo en las cookies del cliente
         if (refreshToken) {
@@ -36,7 +36,7 @@ export async function login(req, res, next){
                 maxAge: refreshToken.maxAge * 1000,
                 httpOnly: true,
                 secure: false,
-                sameSite: 'lax'
+                sameSite: 'lax',
             });
         }
 
@@ -48,28 +48,28 @@ export async function login(req, res, next){
     } catch (error) {
         next(error);
     }
-};
+}
 
 export const loginGoogleCallback = async (req, res, next) => {
     const { code } = req.query;
 
-    try{
-        if(!code) generateError('Error: No authorization code received', 400);
+    try {
+        if (!code) generateError('Error: No authorization code received', 400);
         const response = await fetch(`${AUTH_API}/auth/google/callback?code=${code}`, {
             method: 'GET',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY
+                'x-api-key': API_GATEWAY_KEY,
             },
         });
 
         const data = await response.json();
 
-        if(response.status !== 200) generateError(response.message, response.status);
+        if (response.status !== 200) generateError(response.message, response.status);
 
         // Obtener las cookies de la respuesta
         const cookies = setCookie.parse(response.headers.get('set-cookie'));
-        const refreshToken = cookies.find(cookie => cookie.name === 'refreshToken');
+        const refreshToken = cookies.find((cookie) => cookie.name === 'refreshToken');
 
         // Si existe el refreshToken, establecerlo en las cookies del cliente
         if (refreshToken) {
@@ -77,34 +77,32 @@ export const loginGoogleCallback = async (req, res, next) => {
                 maxAge: refreshToken.maxAge * 1000,
                 httpOnly: true,
                 secure: false,
-                sameSite: 'lax'
+                sameSite: 'lax',
             });
         }
-        
 
         res.status(200).json({
             status: 200,
             data,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
 };
-    
 
-export async function updatePasswordUser(req, res, next){
+export async function updatePasswordUser(req, res, next) {
     const { email } = req.params;
     const { password } = req.body;
     const token = req.headers.authorization;
-    try{
+    try {
         const response = await fetch(`${AUTH_API}/auth/password/${email}`, {
             method: 'PATCH',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
-                'Authorization': `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({password}),
+            body: JSON.stringify({ password }),
         });
 
         const user = await response.json();
@@ -118,22 +116,22 @@ export async function updatePasswordUser(req, res, next){
             message: 'Password updated successfully',
             user,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
 }
 
-export async function updateAdminUser(req, res, next){
+export async function updateAdminUser(req, res, next) {
     const { email } = req.params;
     const { isAdmin } = req.body;
     const token = req.headers.authorization;
-    try{
+    try {
         const response = await fetch(`${AUTH_API}/auth/${email}`, {
             method: 'PATCH',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
-                'Authorization': `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({ isAdmin }),
         });
@@ -147,19 +145,19 @@ export async function updateAdminUser(req, res, next){
             message: 'User updated successfully',
             user,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
 }
 
-export async function deleteAuth(req, res, next){
-    try{
+export async function deleteAuth(req, res, next) {
+    try {
         const response = await fetch(`${AUTH_API}/auth/delete`, {
             method: 'DELETE',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
-                'Authorization': `Bearer ${req.cookies.accessToken}`
+                Authorization: `Bearer ${req.cookies.accessToken}`,
             },
         });
 
@@ -170,26 +168,26 @@ export async function deleteAuth(req, res, next){
         res.status(200).json({
             status: 200,
             message: 'User deleted successfully',
-            user
+            user,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
 }
 
 export async function logout(req, res, next) {
     try {
-        res.cookie("refreshToken", "", {
+        res.cookie('refreshToken', '', {
             maxAge: 0,
             httpOnly: true,
             secure: false,
-            sameSite: "lax",
+            sameSite: 'lax',
             expires: new Date(0),
         });
 
         res.status(200).json({
             status: 200,
-            message: "Logout successful",
+            message: 'Logout successful',
         });
     } catch (error) {
         next(error);
@@ -197,41 +195,41 @@ export async function logout(req, res, next) {
 }
 
 export const checkAuth = async (req, res, next) => {
-    try{
+    try {
         const token = req.headers.authorization;
 
-        let resfreshToken = "";
+        let resfreshToken = '';
         const oldCookie = req.cookies?.refreshToken;
 
-        if(oldCookie && oldCookie !== "undefined"){
+        if (oldCookie && oldCookie !== 'undefined') {
             resfreshToken = oldCookie;
         }
 
         const response = await fetch(`${AUTH_API}/auth/check`, {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json",
-                "x-api-key": API_GATEWAY_KEY,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
                 Authorization: token,
             },
             body: JSON.stringify({ refreshToken: resfreshToken }),
         });
 
-        if(response.status !== 200) generateError('Unauthorized', 401);
+        if (response.status !== 200) generateError('Unauthorized', 401);
 
         const user = await response.json();
 
-        console.log("headers",response.headers);
+        console.log('headers', response.headers);
 
         const cookies = setCookie.parse(response.headers.get('set-cookie'));
-        const refreshToken = cookies.find(cookie => cookie.name === 'refreshToken');
+        const refreshToken = cookies.find((cookie) => cookie.name === 'refreshToken');
 
         if (refreshToken) {
             res.cookie('refreshToken', refreshToken.value, {
                 maxAge: refreshToken.maxAge * 1000,
                 httpOnly: true,
                 secure: false,
-                sameSite: 'lax'
+                sameSite: 'lax',
             });
         }
         const authHeader = response.headers.get('authorization');
@@ -243,8 +241,8 @@ export const checkAuth = async (req, res, next) => {
             message: 'User authenticated',
             user,
         });
-    }catch(error){
+    } catch (error) {
         console.log(error);
         next(error);
     }
-}
+};

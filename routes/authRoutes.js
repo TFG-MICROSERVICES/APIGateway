@@ -1,21 +1,13 @@
 import express from 'express';
-import { 
-    login ,
-    logout,
-    loginGoogleCallback,
-    checkAuth,
-} from '../controllers/authControllers.js';
-import { 
-    updateAdminUser,
-    updatePasswordUser,
-} from '../controllers/authControllers.js';
+import { login, logout, loginGoogleCallback, checkAuth } from '../controllers/authControllers.js';
+import { updateAdminUser, updatePasswordUser } from '../controllers/authControllers.js';
 import { verifyEmailMatch } from '../middlewares/verifyEmailMatch.js';
 import { getAuthUser } from '../middlewares/getAuthUser.js';
 
 const router = express.Router();
 
 //POST http://localhost:3000:/api/auth/google
-router.post('/login',login);
+router.post('/login', login);
 
 //GET http://localhost:3000/api/auth/google/callback
 router.get('/google/callback', loginGoogleCallback);

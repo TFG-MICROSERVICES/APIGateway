@@ -1,6 +1,6 @@
-import { generateError } from "../utils/generateError.js";
-import fetch from "node-fetch";
-import dotenv from "dotenv";
+import { generateError } from '../utils/generateError.js';
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -10,10 +10,10 @@ export async function getAuthUser(req, res, next) {
     try {
         const token = req.headers.authorization;
         const getUserAuthRequest = await fetch(`${AUTH_API}/auth/check`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "X-API-Key": API_GATEWAY_KEY,
+                'Content-Type': 'application/json',
+                'X-API-Key': API_GATEWAY_KEY,
                 Authorization: token,
             },
         });

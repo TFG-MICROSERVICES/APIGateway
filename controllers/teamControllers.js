@@ -5,15 +5,15 @@ import { generateError } from '../utils/generateError.js';
 
 dotenv.config();
 
-const { API_GATEWAY_KEY, TEAM_API} = process.env;
+const { API_GATEWAY_KEY, TEAM_API } = process.env;
 
-export const registerTeam = async (req,res,next) => {
+export const registerTeam = async (req, res, next) => {
     const data = req.body;
 
-    try{
-        const response = await fetch(`${TEAM_API}/team/`,{
+    try {
+        const response = await fetch(`${TEAM_API}/team/`, {
             method: 'POST',
-            headers:{
+            headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
             },
@@ -22,24 +22,23 @@ export const registerTeam = async (req,res,next) => {
 
         const newTeam = await response.json();
 
-        if(response.status !== 201) generateError(newTeam.message,newTeam.status);
+        if (response.status !== 201) generateError(newTeam.message, newTeam.status);
 
         res.status(201).json({
             status: 201,
             message: 'Sport created successfully',
-            newTeam
+            newTeam,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};
 
-export const getTeams = async (req,res,next) => {
-
-    try{
-        const response = await fetch(`${TEAM_API}/team/`,{
+export const getTeams = async (req, res, next) => {
+    try {
+        const response = await fetch(`${TEAM_API}/team/`, {
             method: 'GET',
-            headers:{
+            headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
             },
@@ -47,47 +46,47 @@ export const getTeams = async (req,res,next) => {
 
         const teams = await response.json();
 
-        if(response.status !== 201) generateError(teams.message,teams.status);
+        if (response.status !== 201) generateError(teams.message, teams.status);
 
         res.status(201).json({
             status: 200,
-            teams
+            teams,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};
 
-export const getTeamById = async (req,res,next) =>{
-    try{
+export const getTeamById = async (req, res, next) => {
+    try {
         const { id } = req.params;
-        
-        const response = await fetch(`${TEAM_API}/team/${id}`,{
-            method:'GET',
+
+        const response = await fetch(`${TEAM_API}/team/${id}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
-            }
+            },
         });
 
         const team = await response.json();
 
-        if(response.status !== 200) generateError(team.message, team.status);
+        if (response.status !== 200) generateError(team.message, team.status);
 
         res.status(200).json({
             status: 200,
-            team
+            team,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};
 
-export const updateTeam = async (req,res,next) =>{
-    try{
+export const updateTeam = async (req, res, next) => {
+    try {
         const { id } = req.params;
         const data = req.body;
-        const response = await fetch(`${TEAM_API}/team/${id}`,{
+        const response = await fetch(`${TEAM_API}/team/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,21 +97,21 @@ export const updateTeam = async (req,res,next) =>{
 
         const updateTeam = await response.json();
 
-        if(response.status !== 200) generateError(updateTeam.message, updateTeam.status);
+        if (response.status !== 200) generateError(updateTeam.message, updateTeam.status);
 
         res.status(200).json({
             status: 200,
-            updateTeam
+            updateTeam,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};
 
-export const deleteTeam = async (req,res,next) =>{
-    try{
+export const deleteTeam = async (req, res, next) => {
+    try {
         const { id } = req.params;
-        const response = await fetch(`${TEAM_API}/team/${id}`,{
+        const response = await fetch(`${TEAM_API}/team/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -122,13 +121,13 @@ export const deleteTeam = async (req,res,next) =>{
 
         const deleteTeam = await response.json();
 
-        if(response.status !== 200) generateError(deleteTeam.message,deleteTeam.status);
+        if (response.status !== 200) generateError(deleteTeam.message, deleteTeam.status);
 
         res.status(200).json({
             status: 200,
-            deleteTeam
+            deleteTeam,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};

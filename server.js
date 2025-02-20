@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 EventEmitter.defaultMaxListeners = 30;
 app.use(
     cors({
-        origin: ['http://localhost:5173',],
+        origin: ['http://localhost:5173'],
         exposedHeaders: 'Authorization',
         credentials: true,
     })
@@ -27,16 +27,15 @@ app.use(express.json());
 app.use(morgan('combined'));
 app.use(cookieParser());
 
-app.use('/api/auth',authRoutes);
-app.use('/api/user',userRoutes);
-app.use('/api/sport',sportRoutes);
-app.use('/api/teams',teamRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/sport', sportRoutes);
+app.use('/api/teams', teamRoutes);
 
-
-app.use((req,res,next) => {
+app.use((req, res, next) => {
     console.log('Route not found');
     res.status(404).json({
-        message: 'Route not found'
+        message: 'Route not found',
     });
 });
 

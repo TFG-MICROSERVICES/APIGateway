@@ -1,18 +1,18 @@
-import fetch from "node-fetch";
+import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
 
 dotenv.config();
 
-const { API_GATEWAY_KEY, SPORT_API  } = process.env;
+const { API_GATEWAY_KEY, SPORT_API } = process.env;
 
-export const registerSport = async (req,res,next) =>{
+export const registerSport = async (req, res, next) => {
     const data = req.body;
 
-    try{
-        const response = await fetch(`${SPORT_API}/sport/`,{
+    try {
+        const response = await fetch(`${SPORT_API}/sport/`, {
             method: 'POST',
-            headers:{
+            headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
             },
@@ -21,76 +21,76 @@ export const registerSport = async (req,res,next) =>{
 
         const newSport = await response.json();
 
-        if(response.status !== 201) generateError(newSport.message,newSport.status);
+        if (response.status !== 201) generateError(newSport.message, newSport.status);
 
         res.status(201).json({
             status: 201,
             message: 'Sport created successfully',
-            newSport
+            newSport,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};
 
-export const getSports = async (req,res,next) =>{
-    try{
+export const getSports = async (req, res, next) => {
+    try {
         const { search } = req.query;
         let params = '';
-        if(search){
-            params = new URLSearchParams({search}).toString();
+        if (search) {
+            params = new URLSearchParams({ search }).toString();
         }
-        const response = await fetch(`${SPORT_API}/sport${params ? '?' + params : ''}`,{
+        const response = await fetch(`${SPORT_API}/sport${params ? '?' + params : ''}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
-            }
+            },
         });
 
         const sports = await response.json();
 
-        if(response.status !== 200) generateError(sports.message,sports.status);
+        if (response.status !== 200) generateError(sports.message, sports.status);
 
         res.status(200).json({
             status: 200,
-            sports
+            sports,
         });
-    }catch(error){  
+    } catch (error) {
         next(error);
     }
-}
+};
 
-export const getSportsByID = async (req,res,next) =>{
-    try{
+export const getSportsByID = async (req, res, next) => {
+    try {
         const { id } = req.params;
-        
-        const response = await fetch(`${SPORT_API}/sport/${id}`,{
-            method:'GET',
+
+        const response = await fetch(`${SPORT_API}/sport/${id}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
-            }
+            },
         });
 
         const sport = await response.json();
 
-        if(response.status !== 200) generateError(sport.message, sport.status);
+        if (response.status !== 200) generateError(sport.message, sport.status);
 
         res.status(200).json({
             status: 200,
-            sport
+            sport,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};
 
-export const updateSport = async (req,res,next) =>{
-    try{
+export const updateSport = async (req, res, next) => {
+    try {
         const { id } = req.params;
         const data = req.body;
-        const response = await fetch(`${SPORT_API}/sport/${id}`,{
+        const response = await fetch(`${SPORT_API}/sport/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,21 +101,21 @@ export const updateSport = async (req,res,next) =>{
 
         const updateSport = await response.json();
 
-        if(response.status !== 200) generateError(updateSport.message, updateSport.status);
+        if (response.status !== 200) generateError(updateSport.message, updateSport.status);
 
         res.status(200).json({
             status: 200,
-            updateSport
+            updateSport,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};
 
-export const deleteSport = async (req,res,next) =>{
-    try{
+export const deleteSport = async (req, res, next) => {
+    try {
         const { id } = req.params;
-        const response = await fetch(`${SPORT_API}/sport/${id}`,{
+        const response = await fetch(`${SPORT_API}/sport/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -125,13 +125,13 @@ export const deleteSport = async (req,res,next) =>{
 
         const deleteSport = await response.json();
 
-        if(response.status !== 200) generateError(deleteSport.message,deleteSport.status);
+        if (response.status !== 200) generateError(deleteSport.message, deleteSport.status);
 
         res.status(200).json({
             status: 200,
-            deleteSport
+            deleteSport,
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};

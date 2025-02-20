@@ -1,12 +1,5 @@
 import express from 'express';
-import {
-    registerUser,
-    deleteUser,
-    updateUser,
-    updateEmailUser,
-    getUsers,
-    getUser,
-} from '../controllers/userController.js';
+import { registerUser, deleteUser, updateUser, updateEmailUser, getUsers, getUser } from '../controllers/userController.js';
 import { registerAuthUser } from '../middlewares/registerAuthUser.js';
 import { deleteAuthUser } from '../middlewares/deleteAuthUser.js';
 import { getAuthUser } from '../middlewares/getAuthUser.js';

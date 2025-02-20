@@ -4,15 +4,15 @@ import dotenv from 'dotenv';
 
 const { API_GATEWAY_KEY, AUTH_API } = process.env;
 
-export async function registerAuthUser(req, res, next){
+export async function registerAuthUser(req, res, next) {
     const { email, password } = req.body;
     console.log(API_GATEWAY_KEY);
-    try{
+    try {
         const response = await fetch(`${AUTH_API}/auth/register`, {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY
+                'x-api-key': API_GATEWAY_KEY,
             },
             body: JSON.stringify({ email, password }),
             credentials: 'include',
@@ -24,7 +24,7 @@ export async function registerAuthUser(req, res, next){
 
         req.user = user;
         next();
-    }catch(error){
+    } catch (error) {
         next(error);
     }
 }

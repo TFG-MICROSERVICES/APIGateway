@@ -1,11 +1,11 @@
-import { generateError } from "../utils/generateError.js";
+import { generateError } from '../utils/generateError.js';
 
-export const isAdmin = (req,res,next) =>{
-    try{    
+export const isAdmin = (req, res, next) => {
+    try {
         const { admin } = req.user;
-        if(!admin) generateError('You dont allow this route',403);
+        if (!admin) generateError('You dont allow this route', 403);
         next();
-    }catch(error){
+    } catch (error) {
         next(error);
     }
-}
+};
