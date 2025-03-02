@@ -40,11 +40,9 @@ export async function login(req, res, next) {
             });
         }
 
-        res.status(200).json({
-            status: 200,
-            message: 'Login successful',
-            user,
-        });
+        req.login = true;
+        req.user = user;
+        next();
     } catch (error) {
         next(error);
     }
@@ -236,11 +234,9 @@ export const checkAuth = async (req, res, next) => {
         if (authHeader) {
             res.setHeader('authorization', authHeader);
         }
-        res.status(200).json({
-            status: 200,
-            message: 'User authenticated',
-            user,
-        });
+
+        req.user = user.user;
+        next();
     } catch (error) {
         console.log(error);
         next(error);

@@ -50,6 +50,8 @@ export const getSports = async (req, res, next) => {
 
         const sports = await response.json();
 
+        console.log(sports);
+
         if (response.status !== 200) generateError(sports.message, sports.status);
 
         res.status(200).json({

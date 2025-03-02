@@ -3,11 +3,12 @@ import { login, logout, loginGoogleCallback, checkAuth } from '../controllers/au
 import { updateAdminUser, updatePasswordUser } from '../controllers/authControllers.js';
 import { verifyEmailMatch } from '../middlewares/verifyEmailMatch.js';
 import { getAuthUser } from '../middlewares/getAuthUser.js';
+import { getUser } from '../middlewares/getUser.js';
 
 const router = express.Router();
 
 //POST http://localhost:3000:/api/auth/google
-router.post('/login', login);
+router.post('/login', login, getUser);
 
 //GET http://localhost:3000/api/auth/google/callback
 router.get('/google/callback', loginGoogleCallback);
@@ -19,7 +20,7 @@ router.get('/logout', logout);
 router.patch('/password/:email', getAuthUser, verifyEmailMatch, updatePasswordUser);
 
 //GET http://locahost:3000/api/auth/check
-router.get('/check', checkAuth);
+router.get('/check', checkAuth, getUser);
 
 //PATCH http://localhost:3000/api/auth/:email
 router.patch('/:email', updateAdminUser);

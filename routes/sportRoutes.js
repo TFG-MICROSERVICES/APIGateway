@@ -5,7 +5,7 @@ import { isAdmin } from '../middlewares/isAdmin.js';
 
 const router = express.Router();
 
-//GET http://localhost:3000/api/sportss
+//GET http://localhost:3000/api/sports
 router.get('/', getAuthUser, getSports);
 
 //POST http://localhost:3000/api/sports
