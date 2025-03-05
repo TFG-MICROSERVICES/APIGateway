@@ -36,7 +36,7 @@ export const registerTeam = async (req, res, next) => {
 
 export const getTeams = async (req, res, next) => {
     try {
-        const response = await fetch(`${TEAM_API}/team/`, {
+        const response = await fetch(`${TEAM_API}/teams/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -46,13 +46,14 @@ export const getTeams = async (req, res, next) => {
 
         const teams = await response.json();
 
-        if (response.status !== 201) generateError(teams.message, teams.status);
+        if (response.status !== 200) generateError(teams.message, teams.status);
 
-        res.status(201).json({
+        res.status(200).json({
             status: 200,
             teams,
         });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };

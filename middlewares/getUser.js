@@ -9,7 +9,7 @@ export const getUser = async (req, res, next) => {
 
         console.log('login', login);
         console.log('user', user);
-        const response = await fetch(`${USER_API}/user/${user?.user?.email || user?.email}`, {
+        const response = await fetch(`${USER_API}/user/${user?.user?.id || user?.id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
@@ -17,6 +17,8 @@ export const getUser = async (req, res, next) => {
         });
 
         const userData = await response.json();
+
+        console.log(userData);
 
         if (response.status !== 200) generateError(response.status, response.message);
 
