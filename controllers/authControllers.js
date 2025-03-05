@@ -89,11 +89,11 @@ export const loginGoogleCallback = async (req, res, next) => {
 };
 
 export async function updatePasswordUser(req, res, next) {
-    const { email } = req.params;
+    const { id } = req.params;
     const { password } = req.body;
     const token = req.headers.authorization;
     try {
-        const response = await fetch(`${AUTH_API}/auth/password/${email}`, {
+        const response = await fetch(`${AUTH_API}/auth/password/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -120,11 +120,11 @@ export async function updatePasswordUser(req, res, next) {
 }
 
 export async function updateAdminUser(req, res, next) {
-    const { email } = req.params;
+    const { id } = req.params;
     const { isAdmin } = req.body;
     const token = req.headers.authorization;
     try {
-        const response = await fetch(`${AUTH_API}/auth/${email}`, {
+        const response = await fetch(`${AUTH_API}/auth/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

@@ -11,16 +11,16 @@ const router = express.Router();
 
 router.get('/', getAuthUser, getUsers);
 
-router.get('/:email', getAuthUser, verifyEmailMatch, getUser);
+router.get('/:id', getAuthUser, verifyEmailMatch, getUser);
 
 router.post('/register', registerAuthUser, registerUser);
 
 router.post('/register/google', registerUser);
 
-router.delete('/:email', getAuthUser, verifyEmailMatch, deleteAuthUser, deleteUser);
+router.delete('/:id', getAuthUser, verifyEmailMatch, deleteAuthUser, deleteUser);
 
-router.put('/:email', getAuthUser, verifyEmailMatch, updateUser);
+router.put('/:id', getAuthUser, verifyEmailMatch, updateUser);
 
-router.patch('/email/:email', getAuthUser, verifyEmailMatch, updateEmailAuth, updateEmailUser, logout);
+router.patch('/email/:id', getAuthUser, verifyEmailMatch, updateEmailAuth, updateEmailUser, logout);
 
 export default router;

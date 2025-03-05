@@ -16,13 +16,13 @@ router.get('/google/callback', loginGoogleCallback);
 //GET http://localhost:3000/api/auth/logout
 router.get('/logout', logout);
 
-//PATCH http://localhost:3000/api/auth/password/:email
-router.patch('/password/:email', getAuthUser, verifyEmailMatch, updatePasswordUser);
+//PATCH http://localhost:3000/api/auth/password/:id
+router.patch('/password/:id', getAuthUser, verifyEmailMatch, updatePasswordUser);
 
 //GET http://locahost:3000/api/auth/check
 router.get('/check', checkAuth, getUser);
 
-//PATCH http://localhost:3000/api/auth/:email
-router.patch('/:email', updateAdminUser);
+//PATCH http://localhost:3000/api/auth/:id
+router.patch('/:id', updateAdminUser);
 
 export default router;

@@ -79,9 +79,9 @@ export async function getUsers(req, res, next) {
 }
 
 export const getUser = async (req, res, next) => {
-    const { email } = req.params;
+    const { id } = req.params;
     try {
-        const response = await fetch(`${USER_API}/user/${email}`, {
+        const response = await fetch(`${USER_API}/user/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
@@ -102,11 +102,11 @@ export const getUser = async (req, res, next) => {
 };
 
 export async function updateUser(req, res, next) {
-    const { email } = req.params;
+    const { id } = req.params;
     const data = req.body;
     const token = req.user.token;
     try {
-        const response = await fetch(`${USER_API}/user/${email}`, {
+        const response = await fetch(`${USER_API}/user/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -131,10 +131,10 @@ export async function updateUser(req, res, next) {
 }
 
 export async function updateEmailUser(req, res, next) {
-    const { email } = req.params;
+    const { id } = req.params;
     const { newEmail } = req.body;
     try {
-        const response = await fetch(`${USER_API}/user/email/${email}`, {
+        const response = await fetch(`${USER_API}/user/email/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -154,10 +154,10 @@ export async function updateEmailUser(req, res, next) {
 }
 
 export async function deleteUser(req, res, next) {
-    const { email } = req.params;
+    const { id } = req.params;
     const token = req.user.token;
     try {
-        const response = await fetch(`${USER_API}/user/${email}`, {
+        const response = await fetch(`${USER_API}/user/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
