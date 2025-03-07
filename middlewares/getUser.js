@@ -28,7 +28,7 @@ export const getUser = async (req, res, next) => {
                 user: {
                     id: userData.user.id,
                     email: user.user.email,
-                    admin: userData.user.admin,
+                    admin: user.user.admin,
                     name: userData.user.name,
                     lastName: userData.user.lastName,
                     image_profile: userData.user.image_profile,
@@ -49,13 +49,13 @@ export const getUser = async (req, res, next) => {
             };
         }
 
-        console.log(userAuth);
+        console.log('userAuth', userAuth);
 
         if (login) {
             res.status(200).json({
                 status: 200,
                 message: 'Login successful',
-                user,
+                user: userAuth,
             });
         } else {
             res.status(200).json({

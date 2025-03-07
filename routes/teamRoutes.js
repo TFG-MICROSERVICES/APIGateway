@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', getAuthUser, getTeams);
 
-router.post('/', getAuthUser, registerTeam);
+router.post('/register', getAuthUser, registerTeam);
 
 router.get('/:team_id', getAuthUser, getTeamById);
 

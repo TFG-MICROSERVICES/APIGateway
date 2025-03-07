@@ -11,7 +11,7 @@ export const registerTeam = async (req, res, next) => {
     const data = req.body;
 
     try {
-        const response = await fetch(`${TEAM_API}/team/`, {
+        const response = await fetch(`${TEAM_API}/team/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,7 +36,12 @@ export const registerTeam = async (req, res, next) => {
 
 export const getTeams = async (req, res, next) => {
     try {
-        const response = await fetch(`${TEAM_API}/teams/`, {
+        const { search } = req.query;
+        let params = '';
+        if (search) {
+            params = new URLSearchParams({ search }).toString();
+        }
+        const response = await fetch(`${TEAM_API}/team/${params ? '?' + params : ''}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,9 +65,9 @@ export const getTeams = async (req, res, next) => {
 
 export const getTeamById = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const { team_id } = req.params;
 
-        const response = await fetch(`${TEAM_API}/team/${id}`, {
+        const response = await fetch(`${TEAM_API}/team/${team_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -85,9 +90,9 @@ export const getTeamById = async (req, res, next) => {
 
 export const updateTeam = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const { team_id } = req.params;
         const data = req.body;
-        const response = await fetch(`${TEAM_API}/team/${id}`, {
+        const response = await fetch(`${TEAM_API}/team/${team_id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -111,8 +116,8 @@ export const updateTeam = async (req, res, next) => {
 
 export const deleteTeam = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const response = await fetch(`${TEAM_API}/team/${id}`, {
+        const { team_id } = req.params;
+        const response = await fetch(`${TEAM_API}/team/${team_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

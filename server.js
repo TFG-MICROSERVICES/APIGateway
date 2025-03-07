@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/sport', sportRoutes);
-app.use('/api/teams', teamRoutes);
+app.use('/api/team', teamRoutes);
 
 app.use((req, res, next) => {
     console.log('Route not found');
