@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
+import { getSportsService, getSportsByIDService } from '../services/sportServices.js';
 
 dotenv.config();
 
@@ -36,23 +37,8 @@ export const registerSport = async (req, res, next) => {
 export const getSports = async (req, res, next) => {
     try {
         const { search } = req.query;
-        let params = '';
-        if (search) {
-            params = new URLSearchParams({ search }).toString();
-        }
-        const response = await fetch(`${SPORT_API}/sport${params ? '?' + params : ''}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY,
-            },
-        });
 
-        const sports = await response.json();
-
-        console.log(sports);
-
-        if (response.status !== 200) generateError(sports.message, sports.status);
+        const sports = await getSportsService(search);
 
         res.status(200).json({
             status: 200,
@@ -67,17 +53,7 @@ export const getSportsByID = async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        const response = await fetch(`${SPORT_API}/sport/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY,
-            },
-        });
-
-        const sport = await response.json();
-
-        if (response.status !== 200) generateError(sport.message, sport.status);
+        const sport = await getSportsByIDService(id);
 
         res.status(200).json({
             status: 200,

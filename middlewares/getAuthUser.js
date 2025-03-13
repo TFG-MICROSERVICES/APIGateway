@@ -25,8 +25,6 @@ export async function getAuthUser(req, res, next) {
         req.user = getUserAuth.user;
         req.user.token = token;
 
-        console.log(req.user);
-
         next();
     } catch (error) {
         next(error);

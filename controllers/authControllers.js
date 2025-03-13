@@ -22,8 +22,6 @@ export async function login(req, res, next) {
 
         const user = await response.json();
 
-        console.log(user);
-
         if (response.status !== 200) generateError(user.message, response.status);
 
         // Obtener las cookies de la respuesta
@@ -104,8 +102,6 @@ export async function updatePasswordUser(req, res, next) {
         });
 
         const user = await response.json();
-
-        console.log(user);
 
         if (response.status !== 200) generateError(user.message, response.status);
 
@@ -216,8 +212,6 @@ export const checkAuth = async (req, res, next) => {
         if (response.status !== 200) generateError('Unauthorized', 401);
 
         const user = await response.json();
-
-        console.log('headers', response.headers);
 
         const cookies = setCookie.parse(response.headers.get('set-cookie'));
         const refreshToken = cookies.find((cookie) => cookie.name === 'refreshToken');
