@@ -90,3 +90,66 @@ export const addUserToTeamService = async (data) => {
         throw error;
     }
 };
+
+export const requestToJoinTeamService = async (data) => {
+    try {
+        const response = await fetch(`${TEAM_API}/team/request`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+            body: JSON.stringify(data),
+        });
+
+        const team = await response.json();
+
+        if (response.status !== 200) generateError(team.message, team.status);
+
+        return true;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getRequestsByTeamIDService = async (id) => {
+    try {
+        const response = await fetch(`${TEAM_API}/team/request/team/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+        });
+
+        const requests = await response.json();
+
+        if (response.status !== 200) generateError(requests.message, requests.status);
+
+        return requests;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const updateRequestToJoinTeamService = async (id, data) => {
+    try {
+        console.log(id, data);
+        const response = await fetch(`${TEAM_API}/team/request/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+            body: JSON.stringify(data),
+        });
+
+        const team = await response.json();
+
+        if (response.status !== 200) generateError(team.message, team.status);
+
+        return true;
+    } catch (error) {
+        throw error;
+    }
+};

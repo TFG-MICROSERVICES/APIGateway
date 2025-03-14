@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
-
+import { getUserService } from '../services/userServices.js';
 dotenv.config();
 
 const { API_GATEWAY_KEY, USER_API, AUTH_API, INTERNAL_API_KEY } = process.env;
@@ -81,19 +81,9 @@ export async function getUsers(req, res, next) {
 export const getUser = async (req, res, next) => {
     const { id } = req.params;
     try {
-        const response = await fetch(`${USER_API}/user/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY,
-            },
-        });
-
-        const user = await response.json();
-
-        if (response.status !== 200) generateError(user.message, response.status);
+        const user = await getUserService(id);
 
         res.status(200).json({
-            status: 200,
             user,
         });
     } catch (error) {

@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import sportRoutes from './routes/sportRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
+import requestRoutes from './routes/requestRoutes.js';
 import { EventEmitter } from 'events';
 import cookieParser from 'cookie-parser';
 
@@ -28,9 +29,14 @@ app.use(morgan('combined'));
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
+
 app.use('/api/user', userRoutes);
+
 app.use('/api/sport', sportRoutes);
+
 app.use('/api/team', teamRoutes);
+
+app.use('/api/request', requestRoutes);
 
 app.use((req, res, next) => {
     console.log('Route not found');

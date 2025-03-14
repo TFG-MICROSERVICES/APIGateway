@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/', getAuthUser, getUsers);
 
-router.get('/:id', getAuthUser, verifyEmailMatch, getUser);
+router.get('/:id', getAuthUser, getUser);
 
 router.post('/register', registerAuthUser, registerUser);
 

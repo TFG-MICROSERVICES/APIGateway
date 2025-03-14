@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
 import { getTeamsService, getTeamByIdService, addUserToTeamService, createTeamService } from '../services/teamServices.js';
+import { getUserService } from '../services/userServices.js';
 import { getSportsByIDService } from '../services/sportServices.js';
 dotenv.config();
 
@@ -23,8 +24,8 @@ export const addUserToTeam = async (req, res, next) => {
     try {
         await addUserToTeamService(req.body);
 
-        res.status(200).json({
-            status: 200,
+        res.status(201).json({
+            status: 201,
             message: 'Usuario agregado al equipo correctamente',
         });
     } catch (error) {
@@ -50,9 +51,35 @@ export const getTeams = async (req, res, next) => {
             })
         );
 
+        //Añadir obtener los datos de los usuarios que pertenecen al equipo
+        const teamsWithUsers = await Promise.all(
+            teamsWithSport.map(async (team) => {
+                const usersPromises = team.user_teams.map(async (userTeam) => {
+                    const { user } = await getUserService(userTeam.user_id);
+                    return { ...userTeam, user };
+                });
+
+                const users = await Promise.all(usersPromises);
+                return { ...team, user_teams: users };
+            })
+        );
+
+        //Obtenemos los datos de los usuarios que han solicitado unirse al equipo
+        const teamsWithRequests = await Promise.all(
+            teamsWithUsers.map(async (team) => {
+                const requestPromises = team.request_teams.map(async (request) => {
+                    const { user } = await getUserService(request.user_id);
+                    return { ...request, user };
+                });
+
+                const requests = await Promise.all(requestPromises);
+                return { ...team, request_teams: requests };
+            })
+        );
+
         res.status(200).json({
             status: 200,
-            teams: teamsWithSport,
+            teams: teamsWithRequests,
         });
     } catch (error) {
         console.log(error);
@@ -68,6 +95,16 @@ export const getTeamById = async (req, res, next) => {
 
         const { sport } = await getSportsByIDService(team.sport_id);
         team.sport = sport;
+
+        //Añadir obtener los datos de los usuarios que pertenecen al equipo
+        const users = await Promise.all(
+            team.user_teams.map(async (userTeam) => {
+                const { user } = await getUserService(userTeam.user_id);
+                return { ...userTeam, user };
+            })
+        );
+
+        team.user_teams = users;
 
         res.status(200).json({
             status: 200,
