@@ -1,5 +1,13 @@
 import express from 'express';
-import { registerUser, deleteUser, updateUser, updateEmailUser, getUsers, getUser } from '../controllers/userController.js';
+import {
+    registerUser,
+    deleteUser,
+    updateUser,
+    updateEmailUser,
+    getUsers,
+    getUser,
+    registerUserNotMiddleware,
+} from '../controllers/userController.js';
 import { registerAuthUser } from '../middlewares/registerAuthUser.js';
 import { deleteAuthUser } from '../middlewares/deleteAuthUser.js';
 import { getAuthUser } from '../middlewares/getAuthUser.js';
@@ -15,9 +23,9 @@ router.get('/:id', getAuthUser, getUser);
 
 router.post('/register', registerAuthUser, registerUser);
 
-router.post('/register/google', registerUser);
+router.post('/register/google', registerUserNotMiddleware);
 
-router.delete('/:id', getAuthUser, verifyEmailMatch, deleteAuthUser, deleteUser);
+router.delete('/:email', getAuthUser, deleteAuthUser, deleteUser);
 
 router.put('/:id', getAuthUser, verifyEmailMatch, updateUser);
 

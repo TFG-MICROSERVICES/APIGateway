@@ -7,8 +7,8 @@ import { getUser } from '../middlewares/getUser.js';
 
 const router = express.Router();
 
-//POST http://localhost:3000:/api/auth/google
-router.post('/login', login, getUser);
+//POST http://localhost:3000:/api/auth/login
+router.post('/login', login);
 
 //GET http://localhost:3000/api/auth/google/callback
 router.get('/google/callback', loginGoogleCallback);

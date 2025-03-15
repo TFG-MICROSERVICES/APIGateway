@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
-import { getUserService } from '../services/userServices.js';
+import { getUserService, deleteUserService, registerUserService } from '../services/userServices.js';
 dotenv.config();
 
 const { API_GATEWAY_KEY, USER_API, AUTH_API, INTERNAL_API_KEY } = process.env;
@@ -21,6 +21,8 @@ export async function registerUser(req, res, next) {
 
         const newUser = await response.json();
 
+        console.log(newUser);
+
         //If data response is not 201, rollback the user creation to evict inconsistency data in both services
         if (response.status !== 201) {
             const response = await fetch(`${AUTH_API}/auth/${req.user.user.email}`, {
@@ -36,14 +38,14 @@ export async function registerUser(req, res, next) {
             if (response.status !== 200) generateError(deletedUser.message, deletedUser.status);
             //Inform the user that the user was not created by duplicated data or invalid data
             res.status(400).json({
-                message: 'User not created by duplicated data or invalid data',
+                message: newUser.message,
             });
         }
 
         //If data response is 201, return the user created
         res.status(201).json({
             status: 201,
-            message: 'User created successfully',
+            message: 'Usuario registrado correctamente',
             newUser,
         });
     } catch (error) {
@@ -51,6 +53,21 @@ export async function registerUser(req, res, next) {
     }
 }
 
+export async function registerUserNotMiddleware(req, res, next) {
+    try {
+        const newUser = await registerUserService(req.body);
+
+        if (newUser.status !== 201) generateError(newUser.message, newUser.status);
+
+        res.status(201).json({
+            status: 201,
+            message: 'Usuario registrado correctamente',
+            newUser,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
 export async function getUsers(req, res, next) {
     try {
         const { search } = req.query;
@@ -144,25 +161,13 @@ export async function updateEmailUser(req, res, next) {
 }
 
 export async function deleteUser(req, res, next) {
-    const { id } = req.params;
-    const token = req.user.token;
+    const { email } = req.params;
     try {
-        const response = await fetch(`${USER_API}/user/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY,
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        const user = await response.json();
-
-        if (response.status !== 200) generateError(user.message, response.status);
+        const user = await deleteUserService(email);
 
         res.status(200).json({
             status: 200,
-            message: 'User deleted successfully',
+            message: 'Usuario eliminado correctamente',
             user,
         });
     } catch (error) {

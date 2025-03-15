@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import setCookie from 'set-cookie-parser';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
-
+import { getUserService } from '../services/userServices.js';
 dotenv.config();
 
 const { API_GATEWAY_KEY, AUTH_API } = process.env;
@@ -38,9 +38,19 @@ export async function login(req, res, next) {
             });
         }
 
-        req.login = true;
-        req.user = user;
-        next();
+        const userData = await getUserService(user.user.email);
+
+        console.log(userData);
+        console.log(user);
+
+        res.status(200).json({
+            status: 200,
+            message: 'Login realizado correctamente',
+            user: {
+                user: { ...userData.user, ...user.user },
+                token: user.token,
+            },
+        });
     } catch (error) {
         next(error);
     }
@@ -61,24 +71,16 @@ export const loginGoogleCallback = async (req, res, next) => {
 
         const data = await response.json();
 
-        if (response.status !== 200) generateError(response.message, response.status);
+        console.log(data);
 
-        // Obtener las cookies de la respuesta
-        const cookies = setCookie.parse(response.headers.get('set-cookie'));
-        const refreshToken = cookies.find((cookie) => cookie.name === 'refreshToken');
+        if (response.status !== 201 && response.status !== 200) generateError(response.message, response.status);
 
-        // Si existe el refreshToken, establecerlo en las cookies del cliente
-        if (refreshToken) {
-            res.cookie('refreshToken', refreshToken.value, {
-                maxAge: refreshToken.maxAge * 1000,
-                httpOnly: true,
-                secure: false,
-                sameSite: 'lax',
-            });
-        }
+        const user = await getUserService(data.user.email);
 
-        res.status(200).json({
-            status: 200,
+        data.user = { ...user.user, ...data.user };
+
+        res.status(201).json({
+            status: response.status,
             data,
         });
     } catch (error) {

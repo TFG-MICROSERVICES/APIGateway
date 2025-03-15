@@ -7,7 +7,9 @@ export const getUser = async (req, res, next) => {
         const user = req.user;
         const login = req.login;
 
-        const response = await fetch(`${USER_API}/user/${user?.user?.id || user?.id}`, {
+        console.log(user);
+
+        const response = await fetch(`${USER_API}/user/email/${user?.user?.email || user?.email}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,

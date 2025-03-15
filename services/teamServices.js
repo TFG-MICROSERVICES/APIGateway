@@ -26,13 +26,18 @@ export const createTeamService = async (data) => {
     }
 };
 
-export const getTeamsService = async (search) => {
+export const getTeamsService = async (search, sport_id) => {
     try {
-        let params = '';
-        if (search) {
-            params = new URLSearchParams({ search }).toString();
+        let query = '';
+
+        if (search && sport_id) {
+            query = `?search=${search}&sport_id=${sport_id}`;
+        } else if (search) {
+            query = `?search=${search}`;
+        } else if (sport_id) {
+            query = `?sport_id=${sport_id}`;
         }
-        const response = await fetch(`${TEAM_API}/team/${params.length > 0 ? '?' + params : ''}`, {
+        const response = await fetch(`${TEAM_API}/team/${query}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

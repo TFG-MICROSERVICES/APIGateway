@@ -5,15 +5,15 @@ import dotenv from 'dotenv';
 const { API_GATEWAY_KEY, AUTH_API } = process.env;
 
 export async function deleteAuthUser(req, res, next) {
-    const { email } = req.params;
-    const token = req.headers.authorization;
     try {
+        const { email } = req.params;
+        const token = req.headers.authorization;
         const response = await fetch(`${AUTH_API}/auth/${email}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
-                Authorization: `Bearer ${token}`,
+                Authorization: token,
             },
         });
 

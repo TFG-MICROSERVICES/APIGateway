@@ -9,6 +9,7 @@ const { API_GATEWAY_KEY, TEAM_API } = process.env;
 
 export const registerTeam = async (req, res, next) => {
     try {
+        req.body.user = req.user;
         await createTeamService(req.body);
 
         res.status(201).json({
@@ -35,12 +36,12 @@ export const addUserToTeam = async (req, res, next) => {
 
 export const getTeams = async (req, res, next) => {
     try {
-        const { search } = req.query;
+        const { search, sport_id } = req.query;
 
         //Obtenemos los equipos
         const {
             data: { teams },
-        } = await getTeamsService(search);
+        } = await getTeamsService(search, sport_id);
 
         //Obtenemos los deportes de cada uno de los equipos
         const teamsWithSport = await Promise.all(
@@ -55,7 +56,8 @@ export const getTeams = async (req, res, next) => {
         const teamsWithUsers = await Promise.all(
             teamsWithSport.map(async (team) => {
                 const usersPromises = team.user_teams.map(async (userTeam) => {
-                    const { user } = await getUserService(userTeam.user_id);
+                    console.log(userTeam);
+                    const { user } = await getUserService(userTeam.user_email);
                     return { ...userTeam, user };
                 });
 
@@ -68,7 +70,7 @@ export const getTeams = async (req, res, next) => {
         const teamsWithRequests = await Promise.all(
             teamsWithUsers.map(async (team) => {
                 const requestPromises = team.request_teams.map(async (request) => {
-                    const { user } = await getUserService(request.user_id);
+                    const { user } = await getUserService(request.user_email);
                     return { ...request, user };
                 });
 
@@ -99,7 +101,7 @@ export const getTeamById = async (req, res, next) => {
         //Añadir obtener los datos de los usuarios que pertenecen al equipo
         const users = await Promise.all(
             team.user_teams.map(async (userTeam) => {
-                const { user } = await getUserService(userTeam.user_id);
+                const { user } = await getUserService(userTeam.user_email);
                 return { ...userTeam, user };
             })
         );
