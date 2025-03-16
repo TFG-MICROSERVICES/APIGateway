@@ -18,9 +18,10 @@ const PORT = process.env.PORT || 5000;
 EventEmitter.defaultMaxListeners = 30;
 app.use(
     cors({
-        origin: ['http://localhost:5173', 'https://app.sportsconnect.es/'],
+        origin: ['http://localhost:5173', 'https://app.sportsconnect.es'],
         exposedHeaders: 'Authorization',
         credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Agrega los métodos que deseas permitir
     })
 );
 
