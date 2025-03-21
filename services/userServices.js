@@ -33,7 +33,10 @@ export const getUserService = async (email) => {
             },
         });
 
-        if (response.status !== 200) generateError(user.message, response.status);
+        if (response.status !== 200) {
+            const error = await response.json();
+            generateError(error.response, error.status);
+        }
 
         const user = await response.json();
 
