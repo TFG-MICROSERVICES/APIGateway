@@ -71,9 +71,10 @@ export const loginGoogleCallback = async (req, res, next) => {
 
         const data = await response.json();
 
-        console.log(data);
-
-        if (response.status !== 201 && response.status !== 200) generateError(response.message, response.status);
+        if (response.status !== 201 && response.status !== 200) {
+            const error = await response.json();
+            generateError(error.message, error.status);
+        }
 
         const user = await getUserService(data.user.email);
 
