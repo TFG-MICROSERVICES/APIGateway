@@ -20,6 +20,10 @@ export async function login(req, res, next) {
             credentials: 'include',
         });
 
+        res.status(200).json({
+            response,
+        });
+
         if (!response.ok) {
             const error = await response.json();
             generateError(error.message, response.status);
