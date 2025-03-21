@@ -22,20 +22,6 @@ export async function registerAuthUser(req, res, next) {
 
         if (response.status !== 201) generateError(user.message, response.status);
 
-        const cookies = setCookie.parse(response.headers.get('set-cookie'));
-        const refreshToken = cookies.find((cookie) => cookie.name === 'refreshToken');
-
-        // Si existe el refreshToken, establecerlo en las cookies del cliente
-        if (refreshToken) {
-            res.cookie('refreshToken', refreshToken.value, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'None',
-                domain: '.sportsconnect.es',
-                maxAge: refreshToken.maxAge * 1000,
-            });
-        }
-
         res.status(201).json({
             status: 201,
             user,
