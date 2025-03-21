@@ -4,11 +4,14 @@ import { updateAdminUser, updatePasswordUser } from '../controllers/authControll
 import { verifyEmailMatch } from '../middlewares/verifyEmailMatch.js';
 import { getAuthUser } from '../middlewares/getAuthUser.js';
 import { getUser } from '../middlewares/getUser.js';
+import { registerAuthUser } from '../services/authService.js';
 
 const router = express.Router();
 
 //POST http://localhost:3000:/api/auth/login
 router.post('/login', login);
+
+router.post('/register', registerAuthUser);
 
 //GET http://localhost:3000/api/auth/google/callback
 router.get('/google/callback', loginGoogleCallback);

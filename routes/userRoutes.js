@@ -8,7 +8,6 @@ import {
     getUser,
     registerUserNotMiddleware,
 } from '../controllers/userController.js';
-import { registerAuthUser } from '../middlewares/registerAuthUser.js';
 import { deleteAuthUser } from '../middlewares/deleteAuthUser.js';
 import { getAuthUser } from '../middlewares/getAuthUser.js';
 import { updateEmailAuth } from '../middlewares/updateEmailAuth.js';
@@ -21,7 +20,7 @@ router.get('/', getAuthUser, getUsers);
 
 router.get('/:id', getAuthUser, getUser);
 
-router.post('/register', registerAuthUser, registerUser);
+router.post('/register', registerUser);
 
 router.post('/register/google', registerUserNotMiddleware);
 

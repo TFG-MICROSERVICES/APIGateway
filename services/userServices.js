@@ -26,17 +26,20 @@ export const registerUserService = async (data) => {
 
 export const getUserService = async (email) => {
     try {
-        const response = await fetch(`${USER_API}/user/email/`, {
+        const response = await fetch(`${USER_API}/user/email`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
             },
-            body: { email },
+            body: JSON.stringify({ email }),
         });
+
+        console.log(response);
 
         if (response.status !== 200) {
             const error = await response.json();
+            console.log(error);
             generateError(error.response, error.status);
         }
 

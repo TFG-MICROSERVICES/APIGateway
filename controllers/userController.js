@@ -7,9 +7,8 @@ dotenv.config();
 const { API_GATEWAY_KEY, USER_API, AUTH_API, INTERNAL_API_KEY } = process.env;
 
 export async function registerUser(req, res, next) {
-    const data = req.body;
-    const token = req.headers.authorization;
     try {
+        const data = req.body;
         const response = await fetch(`${USER_API}/user/register`, {
             method: 'POST',
             headers: {
@@ -19,30 +18,13 @@ export async function registerUser(req, res, next) {
             body: JSON.stringify(data),
         });
 
-        const newUser = await response.json();
-
-        console.log(newUser);
-
-        //If data response is not 201, rollback the user creation to evict inconsistency data in both services
         if (response.status !== 201) {
-            const response = await fetch(`${AUTH_API}/auth/${req.user.user.email}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': API_GATEWAY_KEY,
-                    Authorization: token,
-                    'x-internal-key': INTERNAL_API_KEY,
-                },
-            });
-            const deletedUser = await response.json();
-            if (response.status !== 200) generateError(deletedUser.message, deletedUser.status);
-            //Inform the user that the user was not created by duplicated data or invalid data
-            res.status(400).json({
-                message: newUser.message,
-            });
+            const error = await response.json();
+            generateError(error.message, error.status);
         }
 
-        //If data response is 201, return the user created
+        const newUser = await response.json();
+
         res.status(201).json({
             status: 201,
             message: 'Usuario registrado correctamente',
