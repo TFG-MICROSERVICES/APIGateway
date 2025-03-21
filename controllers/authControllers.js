@@ -27,7 +27,7 @@ export async function login(req, res, next) {
 
         const user = await response.json();
 
-        const userData = await getUserService(user.user.email);
+        //const userData = await getUserService(user.user.email);
 
         res.status(200).json({
             status: 200,
