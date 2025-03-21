@@ -28,11 +28,11 @@ export async function registerAuthUser(req, res, next) {
         // Si existe el refreshToken, establecerlo en las cookies del cliente
         if (refreshToken) {
             res.cookie('refreshToken', refreshToken.value, {
-                maxAge: refreshToken.maxAge * 1000,
                 httpOnly: true,
                 secure: true,
                 sameSite: 'None',
-                domain: 'sportsconnect.es',
+                domain: '.sportsconnect.es',
+                maxAge: refreshToken.maxAge * 1000,
             });
         }
 
