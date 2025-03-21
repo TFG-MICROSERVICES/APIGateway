@@ -26,11 +26,13 @@ export const registerUserService = async (data) => {
 
 export const getUserService = async (email) => {
     try {
-        const response = await fetch(`${USER_API}/user/email/${email}`, {
+        const response = await fetch(`${USER_API}/user/email/`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
             },
+            body: { email },
         });
 
         if (response.status !== 200) {
