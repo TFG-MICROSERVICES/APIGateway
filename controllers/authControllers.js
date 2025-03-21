@@ -20,27 +20,19 @@ export async function login(req, res, next) {
             credentials: 'include',
         });
 
-        res.status(200).json({
-            response,
-        });
-
-        if (!response.ok) {
+        if (response.status !== 200) {
             const error = await response.json();
             generateError(error.message, response.status);
         }
 
         const user = await response.json();
 
-        // Ya no necesitas parsear las cookies porque el backend las está enviando directamente
         const userData = await getUserService(user.user.email);
 
         res.status(200).json({
             status: 200,
             message: 'Login realizado correctamente',
-            user: {
-                user: { ...userData.user, ...user.user },
-                token: user.token,
-            },
+            user,
         });
     } catch (error) {
         next(error);
