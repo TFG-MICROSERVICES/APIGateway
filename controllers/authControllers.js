@@ -20,6 +20,12 @@ export async function login(req, res, next) {
             credentials: 'include',
         });
 
+        // Verificar el tipo de contenido de la respuesta
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error(`API respondió con formato incorrecto: ${contentType}. Status: ${response.status}`);
+        }
+
         const user = await response.json();
 
         if (response.status !== 200) generateError(user.message, response.status);
@@ -33,15 +39,13 @@ export async function login(req, res, next) {
             res.cookie('refreshToken', refreshToken.value, {
                 maxAge: refreshToken.maxAge * 1000,
                 httpOnly: true,
-                secure: false,
-                sameSite: 'lax',
+                secure: true,
+                sameSite: 'none',
+                domain: '.sportsconnect.es',
             });
         }
 
         const userData = await getUserService(user.user.email);
-
-        console.log(userData);
-        console.log(user);
 
         res.status(200).json({
             status: 200,
