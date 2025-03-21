@@ -31,8 +31,7 @@ export async function registerAuthUser(req, res, next) {
                 maxAge: refreshToken.maxAge * 1000,
                 httpOnly: true,
                 secure: true,
-                sameSite: 'None',
-                domain: '.sportsconnect.es',
+                sameSite: 'lax',
             });
         }
 
