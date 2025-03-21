@@ -9,11 +9,14 @@ export const getUser = async (req, res, next) => {
 
         console.log(user);
 
-        const response = await fetch(`${USER_API}/user/email/${user?.user?.email || user?.email}`, {
+        const email = user?.user?.email || user?.email;
+        const response = await fetch(`${USER_API}/user/email`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_GATEWAY_KEY,
             },
+            body: JSON.stringify({ email }),
         });
 
         const userData = await response.json();
