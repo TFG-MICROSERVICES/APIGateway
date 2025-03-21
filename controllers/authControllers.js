@@ -20,31 +20,14 @@ export async function login(req, res, next) {
             credentials: 'include',
         });
 
-        // Verificar el tipo de contenido de la respuesta
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            throw new Error(`API respondió con formato incorrecto: ${contentType}. Status: ${response.status}`);
+        if (!response.ok) {
+            const error = await response.json();
+            generateError(error.message, response.status);
         }
 
         const user = await response.json();
 
-        if (response.status !== 200) generateError(user.message, response.status);
-
-        // Obtener las cookies de la respuesta
-        const cookies = setCookie.parse(response.headers.get('set-cookie'));
-        const refreshToken = cookies.find((cookie) => cookie.name === 'refreshToken');
-
-        // Si existe el refreshToken, establecerlo en las cookies del cliente
-        if (refreshToken) {
-            res.cookie('refreshToken', refreshToken.value, {
-                maxAge: refreshToken.maxAge * 1000,
-                httpOnly: true,
-                secure: true,
-                sameSite: 'none',
-                domain: '.sportsconnect.es',
-            });
-        }
-
+        // Ya no necesitas parsear las cookies porque el backend las está enviando directamente
         const userData = await getUserService(user.user.email);
 
         res.status(200).json({
