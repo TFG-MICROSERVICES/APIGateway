@@ -27,12 +27,15 @@ export async function login(req, res, next) {
 
         const user = await response.json();
 
-        //const userData = await getUserService(user.user.email);
+        const userData = await getUserService(user.user.email);
 
         res.status(200).json({
             status: 200,
             message: 'Login realizado correctamente',
-            user,
+            user: {
+                user: { ...userData.user, ...user.user },
+                token: user.token,
+            },
         });
     } catch (error) {
         next(error);
