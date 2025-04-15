@@ -7,6 +7,7 @@ import userRoutes from './routes/userRoutes.js';
 import sportRoutes from './routes/sportRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
 import requestRoutes from './routes/requestRoutes.js';
+import eventRoutes from './routes/eventsRoutes.js';
 import { EventEmitter } from 'events';
 import cookieParser from 'cookie-parser';
 
@@ -38,6 +39,8 @@ app.use('/api/sport', sportRoutes);
 app.use('/api/team', teamRoutes);
 
 app.use('/api/request', requestRoutes);
+
+app.use('/api/event', eventRoutes);
 
 app.use((req, res, next) => {
     console.log('Route not found');
