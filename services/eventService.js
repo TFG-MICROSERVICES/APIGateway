@@ -22,6 +22,7 @@ export const createEventService = async (body) => {
 
         return true;
     } catch (error) {
+        console.log(error);
         throw error;
     }
 };
