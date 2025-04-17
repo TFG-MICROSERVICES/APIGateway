@@ -62,7 +62,30 @@ export const getEventService = async (event_id) => {
         const data = await response.json();
 
         if (data.status !== 200) {
-            generateError(error.message, error.status);
+            generateError(data.message, data.status);
+        }
+
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const checkExistsNameEvent = async (body) => {
+    try {
+        const response = await fetch(`${EVENT_API}/events/exists`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+            body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+
+        if (data.status !== 200) {
+            generateError(data.message, data.status);
         }
 
         return data;
@@ -82,11 +105,29 @@ export const updateEventService = async (event_id, body) => {
             body: JSON.stringify(body),
         });
 
-        const { data } = await response.json();
+        const data = await response.json();
 
         if (data.status !== 200) {
             generateError(data.message, data.status);
         }
+
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const deleteEventService = async (event_id) => {
+    try {
+        const response = await fetch(`${EVENT_API}/events/${event_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+        });
+
+        const data = await response.json();
 
         return data;
     } catch (error) {
