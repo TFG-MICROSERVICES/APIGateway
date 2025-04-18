@@ -5,7 +5,7 @@ const { API_GATEWAY_KEY, EVENT_API } = process.env;
 
 export const createEventService = async (body) => {
     try {
-        const response = await fetch(`${EVENT_API}/events`, {
+        const response = await fetch(`${EVENT_API}/event/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export const createEventService = async (body) => {
 
 export const getEventsService = async () => {
     try {
-        const response = await fetch(`${EVENT_API}/events`, {
+        const response = await fetch(`${EVENT_API}/event`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'applicaction/json',
@@ -51,7 +51,7 @@ export const getEventsService = async () => {
 
 export const getEventService = async (event_id) => {
     try {
-        const response = await fetch(`${EVENT_API}/events/${event_id}`, {
+        const response = await fetch(`${EVENT_API}/event/${event_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export const getEventService = async (event_id) => {
 
 export const checkExistsNameEvent = async (body) => {
     try {
-        const response = await fetch(`${EVENT_API}/events/exists`, {
+        const response = await fetch(`${EVENT_API}/event/exists`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export const checkExistsNameEvent = async (body) => {
 
 export const updateEventService = async (event_id, body) => {
     try {
-        const response = await fetch(`${EVENT_API}/events/${event_id}`, {
+        const response = await fetch(`${EVENT_API}/event/${event_id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ export const updateEventService = async (event_id, body) => {
 
 export const deleteEventService = async (event_id) => {
     try {
-        const response = await fetch(`${EVENT_API}/events/${event_id}`, {
+        const response = await fetch(`${EVENT_API}/event/${event_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
