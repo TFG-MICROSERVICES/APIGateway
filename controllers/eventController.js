@@ -24,7 +24,9 @@ export const createEventController = async (req, res, next) => {
 
 export const getEventsController = async (req, res, next) => {
     try {
-        const events = await getEventsService();
+        const { sport_id } = req.query;
+
+        const events = await getEventsService(sport_id);
 
         res.status(200).json({
             status: 200,

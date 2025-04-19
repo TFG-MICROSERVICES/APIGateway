@@ -27,9 +27,9 @@ export const createEventService = async (body) => {
     }
 };
 
-export const getEventsService = async () => {
+export const getEventsService = async (sport_id) => {
     try {
-        const response = await fetch(`${EVENT_API}/event`, {
+        const response = await fetch(`${EVENT_API}/event?sport_id=${sport_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'applicaction/json',

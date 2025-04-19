@@ -3,6 +3,7 @@ import setCookie from 'set-cookie-parser';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
 import { getUserService } from '../services/userServices.js';
+import { getTeamByUserIdService } from '../services/teamServices.js';
 dotenv.config();
 
 const { API_GATEWAY_KEY, AUTH_API } = process.env;

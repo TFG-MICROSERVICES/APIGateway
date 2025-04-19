@@ -1,3 +1,4 @@
+import { getTeamByUserIdService } from '../services/teamServices.js';
 import { generateError } from '../utils/generateError.js';
 
 const { USER_API, API_GATEWAY_KEY } = process.env;

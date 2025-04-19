@@ -1,5 +1,6 @@
 import { generateError } from '../utils/generateError.js';
 import dotenv from 'dotenv';
+import { getTeamByUserIdService } from './teamServices.js';
 
 dotenv.config();
 
@@ -35,11 +36,8 @@ export const getUserService = async (email) => {
             body: JSON.stringify({ email }),
         });
 
-        console.log(response);
-
         if (response.status !== 200) {
             const error = await response.json();
-            console.log(error);
             generateError(error.response, error.status);
         }
 
