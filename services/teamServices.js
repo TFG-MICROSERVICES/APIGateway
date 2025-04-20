@@ -77,12 +77,35 @@ export const getTeamByIdService = async (id) => {
 
 export const getTeamByUserIdService = async (user_email, sportId) => {
     try {
-        const response = await fetch(`${TEAM_API}/team/sport/${sportId}/${user_email}`, {
+        const response = await fetch(`${TEAM_API}/team/user/${user_email}${sportId ? `?sport_id=${sportId}` : ''}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'x-aoi-key': API_GATEWAY_KEY,
+                'x-api-key': API_GATEWAY_KEY,
             },
+        });
+
+        const data = await response.json();
+
+        if (data.status !== 200) {
+            generateError(data.message, data.status);
+        }
+
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getTeamsByArrayService = async (teams) => {
+    try {
+        const response = await fetch(`${TEAM_API}/team/teams-by-array`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+            body: JSON.stringify(teams),
         });
 
         const data = await response.json();

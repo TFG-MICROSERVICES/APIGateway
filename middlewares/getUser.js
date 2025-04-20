@@ -8,8 +8,6 @@ export const getUser = async (req, res, next) => {
         const user = req.user;
         const login = req.login;
 
-        console.log(user);
-
         const email = user?.user?.email || user?.email;
         const response = await fetch(`${USER_API}/user/email`, {
             method: 'POST',

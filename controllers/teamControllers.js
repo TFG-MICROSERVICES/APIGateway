@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
-import { getTeamsService, getTeamByIdService, addUserToTeamService, createTeamService } from '../services/teamServices.js';
+import { getTeamsService, getTeamByIdService, addUserToTeamService, createTeamService, getTeamByUserIdService } from '../services/teamServices.js';
 import { getUserService } from '../services/userServices.js';
 import { getSportsByIDService } from '../services/sportServices.js';
 dotenv.config();
@@ -111,6 +111,23 @@ export const getTeamById = async (req, res, next) => {
         res.status(200).json({
             status: 200,
             team,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getTeamByUserController = async (req, res, next) => {
+    try {
+        const { user_email } = req.params;
+        const { sport_id } = req.query;
+
+        const team = await getTeamByUserIdService(user_email, sport_id);
+
+        res.status(200).json({
+            status: 200,
+            message: 'Equipos encontrados correctamente',
+            data: team,
         });
     } catch (error) {
         next(error);

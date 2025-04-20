@@ -2,7 +2,7 @@ import { createTeamEventService, getTeamsEventByIdService } from '../services/te
 
 export const createTeamEventController = async (req, res, next) => {
     try {
-        const data = await createTeamEventService(req.body);
+        const data = await createTeamEventService({ data: req.body });
 
         res.status(201).json({
             status: 201,

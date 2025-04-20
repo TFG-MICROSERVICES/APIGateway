@@ -6,6 +6,7 @@ import {
     getEventsService,
     updateEventService,
 } from '../services/eventService.js';
+import { getTeamsByArrayService } from '../services/teamServices.js';
 
 export const createEventController = async (req, res, next) => {
     try {
@@ -42,7 +43,14 @@ export const getEventController = async (req, res, next) => {
     try {
         const { event_id } = req.params;
 
+        //Obtenemos toda la información del evento
         const event = await getEventService(event_id);
+
+        //Obtenemos la información de los equipos que estan relacionado con el evento
+        const teams = await getTeamsByArrayService({ data: event.data.teams });
+
+        //Actualiza la información de los eventos del equipo con toda su información
+        event.data.teams = teams.data;
 
         res.status(200).json({
             status: 200,

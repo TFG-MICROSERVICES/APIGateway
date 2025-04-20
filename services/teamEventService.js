@@ -16,7 +16,7 @@ export const createTeamEventService = async (body) => {
 
         const data = await response.json();
 
-        if (data.status !== 200) {
+        if (data.status !== 201) {
             generateError(data.message, data.status);
         }
 
