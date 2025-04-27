@@ -1,7 +1,8 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
-import { getUserService, deleteUserService, registerUserService } from '../services/userServices.js';
+import { getUserService, deleteUserService, registerUserService, updateUserService } from '../services/userServices.js';
+import { updateEmailService } from '../services/authService.js';
 dotenv.config();
 
 const { API_GATEWAY_KEY, USER_API, AUTH_API, INTERNAL_API_KEY } = process.env;
@@ -91,28 +92,20 @@ export const getUser = async (req, res, next) => {
 };
 
 export async function updateUser(req, res, next) {
-    const { id } = req.params;
-    const data = req.body;
-    const token = req.user.token;
     try {
-        const response = await fetch(`${USER_API}/user/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY,
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(data),
-        });
+        const { email } = req.params;
+        const { data } = req.body;
+        const token = req.headers.authorization;
 
-        const user = await response.json();
+        if(email !== data.email){
+            await updateEmailService(email, data, token)
+        }
 
-        if (response.status !== 200) generateError(user.message, response.status);
+        await updateUserService(email, data);
 
         res.status(200).json({
             status: 200,
-            message: 'User updated successfully',
-            user,
+            message: 'Usuario actualizado correctamente',
         });
     } catch (error) {
         next(error);

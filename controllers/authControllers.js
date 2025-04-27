@@ -3,7 +3,8 @@ import setCookie from 'set-cookie-parser';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
 import { getUserService } from '../services/userServices.js';
-import { getTeamByUserIdService } from '../services/teamServices.js';
+import { updatePasswordService } from '../services/authService.js';
+
 dotenv.config();
 
 const { API_GATEWAY_KEY, AUTH_API } = process.env;
@@ -37,10 +38,8 @@ export async function login(req, res, next) {
         if (refreshToken) {
             res.cookie('refreshToken', refreshToken.value, {
                 httpOnly: true,
-                secure: true,
-                sameSite: 'None',
-                domain: '.sportsconnect.es',
-                maxAge: refreshToken.maxAge * 1000,
+                sameSite: 'Lax',
+                maxAge: 24 * 60 * 60 * 1000,
             });
         }
 
@@ -91,28 +90,16 @@ export const loginGoogleCallback = async (req, res, next) => {
 };
 
 export async function updatePasswordUser(req, res, next) {
-    const { id } = req.params;
-    const { password } = req.body;
-    const token = req.headers.authorization;
     try {
-        const response = await fetch(`${AUTH_API}/auth/password/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_GATEWAY_KEY,
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ password }),
-        });
+        const { email } = req.params;
+        const { data } = req.body;
+        const token = req.headers.authorization;
 
-        const user = await response.json();
-
-        if (response.status !== 200) generateError(user.message, response.status);
+        await updatePasswordService(email, data, token);
 
         res.status(200).json({
             status: 200,
-            message: 'Password updated successfully',
-            user,
+            message: 'Contraseña actualizada correctamente',
         });
     } catch (error) {
         next(error);
@@ -120,10 +107,11 @@ export async function updatePasswordUser(req, res, next) {
 }
 
 export async function updateAdminUser(req, res, next) {
-    const { id } = req.params;
-    const { isAdmin } = req.body;
-    const token = req.headers.authorization;
     try {
+        const { id } = req.params;
+        const { isAdmin } = req.body;
+        const token = req.headers.authorization;
+
         const response = await fetch(`${AUTH_API}/auth/${id}`, {
             method: 'PATCH',
             headers: {

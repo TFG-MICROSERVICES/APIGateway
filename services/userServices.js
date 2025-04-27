@@ -49,6 +49,31 @@ export const getUserService = async (email) => {
     }
 };
 
+export const updateUserService = async (user_id, body) => {
+    try{
+        const response = await fetch(`${USER_API}/user/${user_id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+            body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+
+        if (data.status !== 200){
+            generateError(data.message, data.status);
+        }
+
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
 export const deleteUserService = async (email) => {
     try {
         const response = await fetch(`${USER_API}/user/${email}`, {

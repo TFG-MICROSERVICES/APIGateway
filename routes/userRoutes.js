@@ -26,7 +26,7 @@ router.post('/register/google', registerUserNotMiddleware);
 
 router.delete('/:email', getAuthUser, deleteAuthUser, deleteUser);
 
-router.put('/:id', getAuthUser, verifyEmailMatch, updateUser);
+router.put('/:email', getAuthUser, verifyEmailMatch, updateUser);
 
 router.patch('/email/:id', getAuthUser, verifyEmailMatch, updateEmailAuth, updateEmailUser, logout);
 
