@@ -7,6 +7,7 @@ import {
     updateEventService,
 } from '../services/eventService.js';
 import { getTeamsByArrayService } from '../services/teamServices.js';
+import { getUserService } from '../services/userServices.js';
 
 export const createEventController = async (req, res, next) => {
     try {
