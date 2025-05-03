@@ -7,7 +7,7 @@ import {
     updateEventService,
 } from '../services/eventService.js';
 import { getTeamsByArrayService } from '../services/teamServices.js';
-import { getUserService } from '../services/userServices.js';
+import { getUsersByArray, getUserService } from '../services/userServices.js';
 
 export const createEventController = async (req, res, next) => {
     try {
@@ -50,8 +50,21 @@ export const getEventController = async (req, res, next) => {
         //Obtenemos la información de los equipos que estan relacionado con el evento
         const teams = await getTeamsByArrayService({ data: event.data.teams });
 
-        //Actualiza la información de los eventos del equipo con toda su información
+        //Actualiza la información de los equipos del evento con toda su información
         event.data.teams = teams.data;
+
+        // Para cada equipo, si tiene user_teams, obtenemos la info de los usuarios
+        await Promise.all(
+            event.data.teams.map(async (team) => {
+                if (team?.user_teams && team.user_teams.length > 0) {
+                    console.log(team?.user_teams);
+                    const user_teams = await getUsersByArray(
+                        team.user_teams.map((user) => ({ user_email: user.user_email }))
+                    );
+                    team.user_teams = user_teams.data;
+                }
+            })
+        );
 
         res.status(200).json({
             status: 200,

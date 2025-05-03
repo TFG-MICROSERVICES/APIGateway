@@ -49,6 +49,29 @@ export const getUserService = async (email) => {
     }
 };
 
+export const getUsersByArray = async (users) => {
+    try{
+        const response = await fetch(`${USER_API}/user/byArray`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+            body: JSON.stringify({ data: users })
+        });
+
+        const data = await response.json();
+
+        if(data.status !== 200){
+            generateError(data.message, data.status);
+        }
+
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
 export const updateUserService = async (user_id, body) => {
     try{
         const response = await fetch(`${USER_API}/user/${user_id}`, {
