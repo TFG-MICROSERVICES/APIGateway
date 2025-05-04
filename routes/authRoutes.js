@@ -11,6 +11,7 @@ const router = express.Router();
 //POST http://localhost:3000:/api/auth/login
 router.post('/login', login);
 
+//POST http://localhost:3000/api/auth/register
 router.post('/register', registerAuthUser);
 
 //GET http://localhost:3000/api/auth/google/callback

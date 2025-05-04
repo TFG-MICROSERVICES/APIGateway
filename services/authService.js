@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 import { generateError } from '../utils/generateError.js';
-import dotenv from 'dotenv';
 
 const { API_GATEWAY_KEY, AUTH_API } = process.env;
 

@@ -7,10 +7,9 @@ export const createResultsController = async (req, res, next) => {
 
         await createResultsService(data, event_id);
 
-
         res.status(201).json({
             status: 201,
-            message: 'Partidos creados correctamente'
+            message: 'Enfrentamientos generados correctamente'
         })
     }catch(error){
         next(error);

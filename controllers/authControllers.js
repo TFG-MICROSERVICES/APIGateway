@@ -128,7 +128,7 @@ export async function updateAdminUser(req, res, next) {
 
         res.status(200).json({
             status: 200,
-            message: 'User updated successfully',
+            message: 'Rol actualizado correctamente',
             user,
         });
     } catch (error) {
@@ -153,7 +153,7 @@ export async function deleteAuth(req, res, next) {
 
         res.status(200).json({
             status: 200,
-            message: 'User deleted successfully',
+            message: 'Usuario eliminado correctamente',
             user,
         });
     } catch (error) {
@@ -173,7 +173,7 @@ export async function logout(req, res, next) {
 
         res.status(200).json({
             status: 200,
-            message: 'Logout successful',
+            message: 'Cierre de sesión correcto',
         });
     } catch (error) {
         next(error);

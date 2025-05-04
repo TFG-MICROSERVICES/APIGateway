@@ -26,7 +26,7 @@ export const getUser = async (req, res, next) => {
         if (login) {
             userAuth = {
                 user: {
-                    auth_id: req.login.id,
+                    auth_id: user.id,
                     user_id: userData.user.id,
                     email: user.user.email,
                     admin: user.user.admin,
