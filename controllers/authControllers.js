@@ -47,7 +47,7 @@ export async function login(req, res, next) {
             status: 200,
             message: 'Login realizado correctamente',
             user: {
-                user: { ...userData.user, ...user.user },
+                user: { ...userData.user, ...user.user, user_id: userData.user.id, auth_id: user.user.id },
                 token: user.token,
             },
         });
@@ -78,7 +78,7 @@ export const loginGoogleCallback = async (req, res, next) => {
 
         const user = await getUserService(data.user.email);
 
-        data.user = { ...user.user, ...data.user };
+        data.user = { ...user.user, ...data.user, user_id: data.user.id};
 
         res.status(201).json({
             status: response.status,

@@ -23,6 +23,8 @@ export const getUser = async (req, res, next) => {
         if (response.status !== 200) generateError(response.status, response.message);
 
         let userAuth;
+        console.log("user",user);
+        console.log("userData", userData);
         if (login) {
             userAuth = {
                 user: {
