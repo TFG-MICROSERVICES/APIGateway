@@ -4,6 +4,7 @@ import {
     createEventController,
     deleteEventController,
     existsNameEvent,
+    getAllEventsByUserController,
     getEventController,
     getEventsController,
     updateEventController,
@@ -13,6 +14,9 @@ const router = express.Router();
 
 //GET http://localhost:3000/api/event/
 router.get('/', getAuthUser, getEventsController);
+
+//GET http://localhost:3000/api/event/:user_id
+router.get('/user/:user_id', getAuthUser, getAllEventsByUserController);
 
 //GET http://localhost:3000/api/event/:event_id
 router.get('/:event_id', getAuthUser, getEventController);

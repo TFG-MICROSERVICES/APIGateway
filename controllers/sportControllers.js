@@ -11,7 +11,7 @@ export const registerSport = async (req, res, next) => {
     const data = req.body;
 
     try {
-        const response = await fetch(`${SPORT_API}/sport/`, {
+        const response = await fetch(`${SPORT_API}/sport/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -117,17 +117,33 @@ export const getTeamById = async (req, res, next) => {
     }
 };
 
+export const getAllTeamsByUserController = async (req, res, next) => {
+    try{
+        const { user_email } = req.params;
+
+        const { data } = await getTeamByUserIdService(user_email);
+
+        res.status(200).json({
+            status: 200,
+            message: 'Equipos encontrados correctamente',
+            data: data
+        })
+    }catch(error){
+        next(error);
+    }
+}
+
 export const getTeamByUserController = async (req, res, next) => {
     try {
         const { user_email } = req.params;
         const { sport_id } = req.query;
 
-        const team = await getTeamByUserIdService(user_email, sport_id);
+        const { data } = await getTeamByUserIdService(user_email, sport_id);
 
         res.status(200).json({
             status: 200,
             message: 'Equipos encontrados correctamente',
-            data: team,
+            data: data,
         });
     } catch (error) {
         next(error);

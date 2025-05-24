@@ -2,6 +2,7 @@ import {
     checkExistsNameEvent,
     createEventService,
     deleteEventService,
+    getAllEventsByUserService,
     getEventService,
     getEventsService,
     updateEventService,
@@ -75,6 +76,22 @@ export const getEventController = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getAllEventsByUserController = async (req, res, next) => {
+    try{
+        const { user_id } = req.params;
+
+        const { data } = await getAllEventsByUserService(user_id);
+
+        res.status(200).json({
+            status: 200,
+            message: 'Eventos encontrados correctamente',
+            data: data
+        })
+    }catch(error){
+        next(error);
+    }
+}
 
 export const existsNameEvent = async (req, res, next) => {
     try {

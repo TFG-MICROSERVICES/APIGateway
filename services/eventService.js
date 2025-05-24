@@ -71,6 +71,28 @@ export const getEventService = async (event_id) => {
     }
 };
 
+export const getAllEventsByUserService = async (user_id) => {
+    try{
+        const response = await fetch(`${EVENT_API}/event/user/${user_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_GATEWAY_KEY,
+            },
+        });
+
+        const data = await response.json();
+
+        if(data.status!==200){
+            generateError(data.message, data.status);
+        }
+
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
 export const checkExistsNameEvent = async (body) => {
     try {
         const response = await fetch(`${EVENT_API}/event/exists`, {

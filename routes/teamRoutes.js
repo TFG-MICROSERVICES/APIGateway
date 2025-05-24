@@ -7,6 +7,7 @@ import {
     deleteTeam,
     addUserToTeam,
     getTeamByUserController,
+    getAllTeamsByUserController,
 } from '../controllers/teamControllers.js';
 import { getAuthUser } from '../middlewares/getAuthUser.js';
 
@@ -17,6 +18,8 @@ router.get('/', getAuthUser, getTeams);
 
 //GET http://localhost:3000/team/:team_id
 router.get('/:team_id', getAuthUser, getTeamById);
+
+router.get('/user/all/:user_email', getAuthUser, getAllTeamsByUserController);
 
 router.get('/user/:user_email', getAuthUser, getTeamByUserController);
 

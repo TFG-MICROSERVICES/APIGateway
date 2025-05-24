@@ -75,7 +75,15 @@ export const getTeamByIdService = async (id) => {
     }
 };
 
-export const getTeamByUserIdService = async (user_email, sportId) => {
+export const getAllTeamsByUserService = async (user_email) => {
+    try{
+        const response = await fetch(`${TEAM_API}/team/user/${user_email}`)
+    }catch(error){
+        throw error;
+    }
+}
+
+export const getTeamByUserIdService = async (user_email, sportId = null) => {
     try {
         const response = await fetch(`${TEAM_API}/team/user/${user_email}${sportId ? `?sport_id=${sportId}` : ''}`, {
             method: 'GET',
@@ -122,7 +130,7 @@ export const getTeamsByArrayService = async (teams) => {
 
 export const addUserToTeamService = async (data) => {
     try {
-        const response = await fetch(`${TEAM_API}/team/user/`, {
+        const response = await fetch(`${TEAM_API}/team/user/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
