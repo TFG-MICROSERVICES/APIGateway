@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import setCookie from 'set-cookie-parser';
 import dotenv from 'dotenv';
 import { generateError } from '../utils/generateError.js';
-import { getUserService } from '../services/userServices.js';
+import { getUserService, registerUserService } from '../services/userServices.js';
 import { updatePasswordService } from '../services/authService.js';
 
 dotenv.config();
