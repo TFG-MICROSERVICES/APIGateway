@@ -39,6 +39,8 @@ export async function login(req, res, next) {
             res.cookie('refreshToken', refreshToken.value, {
                 httpOnly: true,
                 sameSite: 'Lax',
+                secure: true,
+                domain: 'sportsconnect.es',
                 maxAge: 24 * 60 * 60 * 1000,
             });
         }
@@ -166,7 +168,8 @@ export async function logout(req, res, next) {
         res.cookie('refreshToken', '', {
             maxAge: 0,
             httpOnly: true,
-            secure: false,
+            secure: true,
+            domain: 'sportsconnect.es',
             sameSite: 'lax',
             expires: new Date(0),
         });
