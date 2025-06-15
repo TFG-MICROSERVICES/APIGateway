@@ -80,6 +80,21 @@ export const loginGoogleCallback = async (req, res, next) => {
 
         const user = await getUserService(data.user.email);
 
+        const cookies = setCookie.parse(response.headers.get('set-cookie'));
+        
+        const refreshToken = cookies.find((cookie) => cookie.name === 'refreshToken');
+
+        // Si existe el refreshToken, establecerlo en las cookies del cliente
+        if (refreshToken) {
+            res.cookie('refreshToken', refreshToken.value, {
+                httpOnly: true,
+                sameSite: 'Lax',
+                secure: true,
+                domain: 'sportsconnect.es',
+                maxAge: 24 * 60 * 60 * 1000,
+            });
+        }
+
         data.user = { ...user.user, ...data.user, user_id: data.user.id};
 
         res.status(201).json({
